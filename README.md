@@ -32,10 +32,10 @@
 | 13/09/2018 | Windows Heap Internals(2/2) - LFH Heap
 | 18/09/2018 | Objects Tracking(1/5) | Reversing C++
 | 20/09/2018 | Objects Tracking(2/5) - C++ Objects
-| 25/09/2018 | Objects Tracking(3/5) - Chrome Objects
+| 25/09/2018 | Objects Tracking(3/5)/Chrome Internals - Chrome Objects
 | 27/09/2018 | Chuseok, Korean Harvest Day
 | 02/10/2018 | Objects Tracking(4/5) - Chrome Objects
-| 04/10/2018 | Objects Tracking(5/5) - Flash Objects
+| 04/10/2018 | Objects Tracking(5/5)/Flash Internals - Flash Objects
 | 09/10/2018 | Hangeul Proclamation Day
 | 11/10/2018 | Heap Exploitation(1/2)
 | 16/10/2018 | No class(Midterm week)
