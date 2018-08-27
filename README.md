@@ -24,7 +24,7 @@
 ### Schedule
 | Date       | Topic           | Notes 
 |------------|-----------------|-------
-| 27/08/2018 | Introduction
+| 27/08/2018 | <a href='https://github.com/jaeseolee/IS593-ASCP-Fall-2018/raw/master/lec01/01-Introduction.pdf'>Introduction</a>
 | 29/08/2018 | Security Vulnerability(1/2)
 | 03/09/2018 | Security Vulnerability(2/2)
 | 05/09/2018 | Setup The Lab Environments & Windows Debugger
