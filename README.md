@@ -25,7 +25,7 @@
 | Date       | Topic           | Notes 
 |------------|-----------------|-------
 | 27/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec01/01-Introduction.pdf'>Introduction</a>
-| 29/08/2018 | Security Vulnerability(1/2)
+| 29/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec01/02-Introduction.pdf'>02-Windows Debugger</a>, <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/03-Security Vulnerability.pdf'>Security Vulnerability(1/2)</a> | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec02/WinDbg_A_to_Z_color.pdf'>WinDbg_A_to_Z_color</a>
 | 03/09/2018 | Security Vulnerability(2/2)
 | 05/09/2018 | Setup The Lab Environments & Windows Debugger
 | 10/09/2018 | Windows Heap Internals(1/2) - Standard Heap | Win7 LFH Heap<br>Win8 Heap Internals<br>Win10 Segment Heap Internals
