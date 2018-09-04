@@ -27,8 +27,7 @@
 | 27/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec01/01-Introduction.pdf'>Introduction</a>
 | 29/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec02/02-Security Vulnerability.pdf'>Security Vulnerability(1/2)</a>
 | 03/09/2018 | Security Vulnerability(2/2)
-| 05/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/03-Windows Debugger.pdf'>Windows Debugger</a><br>
-<a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/04-Windows Heap Internals.pdf'>Windows Heap Internals</a>(1/2) - Standard Heap | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/WinDbg_A_to_Z.pdf'>WinDbg_A_to_Z</a>
+| 05/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/03-Windows Debugger.pdf'>Windows Debugger</a><br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/04-Windows Heap Internals.pdf'>Windows Heap Internals</a>(1/2) - Standard Heap | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/WinDbg_A_to_Z.pdf'>WinDbg_A_to_Z</a>
 | 10/09/2018 | Windows Heap Internals(2/2) - LFH Heap | Win7 LFH Heap<br>Win8 Heap Internals<br>Win10 Segment Heap Internals<br>Report #1
 | 12/09/2018 | Custom Heap Manager - About Flash and Chrome
 | 17/09/2018 | Objects Tracking(1/3) - C++ Objects | Reversing C++
