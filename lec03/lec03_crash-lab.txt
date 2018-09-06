@@ -1,0 +1,492 @@
+
+************* Symbol Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+
+Microsoft (R) Windows Debugger Version 10.0.15063.0 X86
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+
+************* Symbol Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+Symbol search path is: SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+Executable search path is: 
+ModLoad: 01370000 01376000   C:\Users\IEUser\Desktop\lec03\lec03_crash.exe
+ModLoad: 77850000 77992000   C:\Windows\SYSTEM32\ntdll.dll
+ModLoad: 75f50000 76025000   C:\Windows\system32\kernel32.dll
+ModLoad: 75890000 758db000   C:\Windows\system32\KERNELBASE.dll
+ModLoad: 688a0000 68911000   C:\Windows\system32\MSVCP120.dll
+ModLoad: 67f70000 6805e000   C:\Windows\system32\MSVCR120.dll
+(584.430): Unknown exception - code c0000374 (!!! second chance !!!)
+eax=001ff658 ebx=00000000 ecx=7fffffff edx=00000000 esi=01390000 edi=01391f58
+eip=77913b93 esp=001ff648 ebp=001ff6c0 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!RtlReportCriticalFailure+0x57:
+77913b93 eb12            jmp     ntdll!RtlReportCriticalFailure+0x6b (77913ba7)
+
+0:000> kb
+ # ChildEBP RetAddr  Args to Child              
+00 001ff6c0 77914ac3 c0000374 7792edd8 001ff704 ntdll!RtlReportCriticalFailure+0x57
+01 001ff6d0 77914ba3 00000002 773f27d7 00000000 ntdll!RtlpReportHeapFailure+0x21
+02 001ff704 778cd79f 00000008 01390000 01391f58 ntdll!RtlpLogHeapFailure+0xa1
+03 001ff734 75f9c614 01390000 00000000 01391f60 ntdll!RtlFreeHeap+0x64
+*** WARNING: Unable to verify checksum for C:\Users\IEUser\Desktop\lec03\lec03_crash.exe
+04 001ff748 013711b4 01390000 00000000 01391f60 kernel32!HeapFree+0x14
+05 001ff7a4 013714a2 00000001 002c0dd0 002c1630 lec03_crash!wmain+0x1b4 [c:\workdir\lecture\lec03\lec03\lec03.cpp @ 163] 
+06 001ff7e4 75f9efac 7ffdc000 001ff830 778b3628 lec03_crash!__tmainCRTStartup+0xfd [f:\dd\vctools\crt\crtw32\dllstuff\crtexe.c @ 623] 
+07 001ff7f0 778b3628 7ffdc000 773f28e3 00000000 kernel32!BaseThreadInitThunk+0xe
+08 001ff830 778b35fb 0137150a 7ffdc000 00000000 ntdll!__RtlUserThreadStart+0x70
+09 001ff848 00000000 0137150a 7ffdc000 00000000 ntdll!_RtlUserThreadStart+0x1b
+
+0:000> !address 01391f60 
+                                     
+Mapping file section regions...
+Mapping module regions...
+Mapping PEB regions...
+Mapping TEB and stack regions...
+Mapping heap regions...
+Mapping page heap regions...
+Mapping other regions...
+Mapping stack trace database regions...
+Mapping activation context regions...
+
+Usage:                  Heap
+Base Address:           01390000
+End Address:            01397000
+Region Size:            00007000 (  28.000 kB)
+State:                  00001000          MEM_COMMIT
+Protect:                00000004          PAGE_READWRITE
+Type:                   00020000          MEM_PRIVATE
+Allocation Base:        01390000
+Allocation Protect:     00000004          PAGE_READWRITE
+More info:              heap owning the address: !heap 0x1390000
+More info:              heap segment
+More info:              heap entry containing the address: !heap -x 0x1391f60
+
+
+Content source: 1 (target), length: a0
+
+0:000> !heap -x 0x1391f60
+SEGMENT HEAP ERROR: failed to initialize the extention
+Entry     User      Heap      Segment       Size  PrevSize  Unused    Flags
+-----------------------------------------------------------------------------
+01391f58  01391f60  01390000  01390000       108       108         0  free 
+
+0:000> !heap 
+SEGMENT HEAP ERROR: failed to initialize the extention
+**************************************************************
+*                                                            *
+*                  HEAP ERROR DETECTED                       *
+*                                                            *
+**************************************************************
+
+Details:
+
+Heap address:  01390000
+Error address: 01391f58
+Error type: HEAP_FAILURE_BLOCK_NOT_BUSY
+Details:    The caller performed an operation (such as a free
+            or a size check) that is illegal on a free block.
+Follow-up:  Check the error's stack trace to find the culprit.
+
+
+Stack trace:
+                778cd79f: ntdll!RtlFreeHeap+0x00000064
+                75f9c614: kernel32!HeapFree+0x00000014
+                013711b4: lec03_crash!wmain+0x000001b4
+                013714a2: lec03_crash!__tmainCRTStartup+0x000000fd
+                75f9efac: kernel32!BaseThreadInitThunk+0x0000000e
+                778b3628: ntdll!__RtlUserThreadStart+0x00000070
+                778b35fb: ntdll!_RtlUserThreadStart+0x0000001b
+
+Index   Address  Name      Debugging options enabled
+  1:   00280000                
+  2:   00010000                
+  3:   00020000                
+  4:   01390000                
+0:000> !heap -h 01390000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   01390000 
+    Segment at 01390000 to 02390000 (00007000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      00000085
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     01390138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   013900a0
+    Uncommitted ranges:   01390090
+    FreeList[ 00 ] at 013900c4: 01396cc8 . 01391f60   (2 blocks)
+
+    Heap entries for Segment00 in Heap 01390000
+         address: psize . size  flags   state (requested size)
+        01390000: 00000 . 00588 [101] - busy (587)
+        01390588: 00588 . 00108 [101] - busy (100)
+        01390690: 00108 . 00108 [101] - busy (100)
+        01390798: 00108 . 00108 [101] - busy (100)
+        013908a0: 00108 . 00108 [101] - busy (100)
+        013909a8: 00108 . 00108 [101] - busy (100)
+        01390ab0: 00108 . 00108 [101] - busy (100)
+        01390bb8: 00108 . 00108 [101] - busy (100)
+        01390cc0: 00108 . 00108 [101] - busy (100)
+        01390dc8: 00108 . 00108 [101] - busy (100)
+        01390ed0: 00108 . 00110 [101] - busy (100)
+        01390fe0: 00110 . 00108 [101] - busy (100)
+        013910e8: 00108 . 00108 [101] - busy (100)
+        013911f0: 00108 . 00108 [101] - busy (100)
+        013912f8: 00108 . 00108 [101] - busy (100)
+        01391400: 00108 . 00108 [101] - busy (100)
+        01391508: 00108 . 00108 [101] - busy (100)
+        01391610: 00108 . 00108 [101] - busy (100)
+        01391718: 00108 . 00108 [101] - busy (100)
+        01391820: 00108 . 00108 [101] - busy (100)
+        01391928: 00108 . 00108 [101] - busy (100)
+        01391a30: 00108 . 00108 [101] - busy (100)
+        01391b38: 00108 . 00108 [101] - busy (100)
+        01391c40: 00108 . 00108 [101] - busy (100)
+        01391d48: 00108 . 00108 [101] - busy (100)
+        01391e50: 00108 . 00108 [101] - busy (100)
+        01391f58: 00108 . 00108 [100]
+        01392060: 00108 . 00108 [101] - busy (100)
+        01392168: 00108 . 00108 [101] - busy (100)
+        01392270: 00108 . 00108 [101] - busy (100)
+        01392378: 00108 . 00108 [101] - busy (100)
+        01392480: 00108 . 00108 [101] - busy (100)
+        01392588: 00108 . 00108 [101] - busy (100)
+        01392690: 00108 . 00108 [101] - busy (100)
+        01392798: 00108 . 00108 [101] - busy (100)
+        013928a0: 00108 . 00108 [101] - busy (100)
+        013929a8: 00108 . 00108 [101] - busy (100)
+        01392ab0: 00108 . 00108 [101] - busy (100)
+        01392bb8: 00108 . 00108 [101] - busy (100)
+        01392cc0: 00108 . 00108 [101] - busy (100)
+        01392dc8: 00108 . 00108 [101] - busy (100)
+        01392ed0: 00108 . 00110 [101] - busy (100)
+        01392fe0: 00110 . 00108 [101] - busy (100)
+        013930e8: 00108 . 00108 [101] - busy (100)
+        013931f0: 00108 . 00108 [101] - busy (100)
+        013932f8: 00108 . 00108 [101] - busy (100)
+        01393400: 00108 . 00108 [101] - busy (100)
+        01393508: 00108 . 00108 [101] - busy (100)
+        01393610: 00108 . 00108 [101] - busy (100)
+        01393718: 00108 . 00108 [101] - busy (100)
+        01393820: 00108 . 00108 [101] - busy (100)
+        01393928: 00108 . 00108 [101] - busy (100)
+        01393a30: 00108 . 00108 [101] - busy (100)
+        01393b38: 00108 . 00108 [101] - busy (100)
+        01393c40: 00108 . 00108 [101] - busy (100)
+        01393d48: 00108 . 00108 [101] - busy (100)
+        01393e50: 00108 . 00108 [101] - busy (100)
+        01393f58: 00108 . 00108 [101] - busy (100)
+        01394060: 00108 . 00108 [101] - busy (100)
+        01394168: 00108 . 00108 [101] - busy (100)
+        01394270: 00108 . 00108 [101] - busy (100)
+        01394378: 00108 . 00108 [101] - busy (100)
+        01394480: 00108 . 00108 [101] - busy (100)
+        01394588: 00108 . 00108 [101] - busy (100)
+        01394690: 00108 . 00108 [101] - busy (100)
+        01394798: 00108 . 00108 [101] - busy (100)
+        013948a0: 00108 . 00108 [101] - busy (100)
+        013949a8: 00108 . 00108 [101] - busy (100)
+        01394ab0: 00108 . 00108 [101] - busy (100)
+        01394bb8: 00108 . 00108 [101] - busy (100)
+        01394cc0: 00108 . 00108 [101] - busy (100)
+        01394dc8: 00108 . 00108 [101] - busy (100)
+        01394ed0: 00108 . 00110 [101] - busy (100)
+        01394fe0: 00110 . 00108 [101] - busy (100)
+        013950e8: 00108 . 00108 [101] - busy (100)
+        013951f0: 00108 . 00108 [101] - busy (100)
+        013952f8: 00108 . 00108 [101] - busy (100)
+        01395400: 00108 . 00108 [101] - busy (100)
+        01395508: 00108 . 00108 [101] - busy (100)
+        01395610: 00108 . 00108 [101] - busy (100)
+        01395718: 00108 . 00108 [101] - busy (100)
+        01395820: 00108 . 00108 [101] - busy (100)
+        01395928: 00108 . 00108 [101] - busy (100)
+        01395a30: 00108 . 00108 [101] - busy (100)
+        01395b38: 00108 . 00108 [101] - busy (100)
+        01395c40: 00108 . 00108 [101] - busy (100)
+        01395d48: 00108 . 00108 [101] - busy (100)
+        01395e50: 00108 . 00108 [101] - busy (100)
+        01395f58: 00108 . 00108 [101] - busy (100)
+        01396060: 00108 . 00108 [101] - busy (100)
+        01396168: 00108 . 00108 [101] - busy (100)
+        01396270: 00108 . 00108 [101] - busy (100)
+        01396378: 00108 . 00108 [101] - busy (100)
+        01396480: 00108 . 00108 [101] - busy (100)
+        01396588: 00108 . 00108 [101] - busy (100)
+        01396690: 00108 . 00108 [101] - busy (100)
+        01396798: 00108 . 00108 [101] - busy (100)
+        013968a0: 00108 . 00108 [101] - busy (100)
+        013969a8: 00108 . 00108 [101] - busy (100)
+        01396ab0: 00108 . 00108 [101] - busy (100)
+        01396bb8: 00108 . 00108 [101] - busy (100)
+        01396cc0: 00108 . 00320 [100]
+        01396fe0: 00320 . 00020 [111] - busy (1d)
+        01397000:      00ff9000      - uncommitted bytes.
+
+0:000> !analyze -v
+*******************************************************************************
+*                                                                             *
+*                        Exception Analysis                                   *
+*                                                                             *
+*******************************************************************************
+
+
+DUMP_CLASS: 2
+
+DUMP_QUALIFIER: 0
+
+FAULTING_IP: 
+ntdll!RtlReportCriticalFailure+57
+77913b93 eb12            jmp     ntdll!RtlReportCriticalFailure+0x6b (77913ba7)
+
+EXCEPTION_RECORD:  (.exr -1)
+ExceptionAddress: 77913b93 (ntdll!RtlReportCriticalFailure+0x00000057)
+   ExceptionCode: c0000374
+  ExceptionFlags: 00000001
+NumberParameters: 1
+   Parameter[0]: 7792edd8
+
+FAULTING_THREAD:  00000430
+
+PROCESS_NAME:  lec03_crash.exe
+
+ERROR_CODE: (NTSTATUS) 0xc0000374 - A heap has been corrupted.
+
+EXCEPTION_CODE: (NTSTATUS) 0xc0000374 - A heap has been corrupted.
+
+EXCEPTION_CODE_STR:  c0000374
+
+EXCEPTION_PARAMETER1:  7792edd8
+
+WATSON_BKT_PROCSTAMP:  59a4d17f
+
+WATSON_BKT_MODULE:  ntdll.dll
+
+WATSON_BKT_MODSTAMP:  5b626fd1
+
+WATSON_BKT_MODOFFSET:  c3b93
+
+WATSON_BKT_MODVER:  6.1.7601.24214
+
+MODULE_VER_PRODUCT:  Microsoft® Windows® Operating System
+
+BUILD_VERSION_STRING:  7601.24214.x86fre.win7sp1_ldr_escrow.180801-1700
+
+MODLIST_WITH_TSCHKSUM_HASH:  ffc31bca81c14cd08a1d318af8fdb3defca6bfbb
+
+MODLIST_SHA1_HASH:  02be0bf65c380f7b6bed456bcce64ad6eb6cf2cf
+
+NTGLOBALFLAG:  0
+
+PROCESS_BAM_CURRENT_THROTTLED: 0
+
+PROCESS_BAM_PREVIOUS_THROTTLED: 0
+
+APPLICATION_VERIFIER_FLAGS:  0
+
+PRODUCT_TYPE:  1
+
+SUITE_MASK:  272
+
+DUMP_TYPE:  fe
+
+ANALYSIS_SESSION_HOST:  IE11WIN7
+
+ANALYSIS_SESSION_TIME:  09-06-2018 08:21:05.0515
+
+ANALYSIS_VERSION: 10.0.15063.0 x86fre
+
+THREAD_ATTRIBUTES: 
+LAST_CONTROL_TRANSFER:  from 77914ac3 to 77913b93
+
+THREAD_SHA1_HASH_MOD_FUNC:  22a50ef15b18ece03f89ef3003e5c9ca69ec98bd
+
+THREAD_SHA1_HASH_MOD_FUNC_OFFSET:  1169e0940e68222a8c1b126293e8e544b48894cf
+
+OS_LOCALE:  ENU
+
+PROBLEM_CLASSES: 
+
+    ID:     [0n244]
+    Type:   [ACTIONABLE]
+    Class:  Addendum
+    Scope:  DEFAULT_BUCKET_ID (Failure Bucket ID prefix)
+            BUCKET_ID
+    Name:   Add
+    Data:   Add
+            String: [BlockNotBusy]
+    PID:    [0x584]
+    TID:    [0x430]
+    Frame:  [2] : ntdll!RtlpLogHeapFailure
+
+    ID:     [0n245]
+    Type:   [HEAP_CORRUPTION]
+    Class:  Primary
+    Scope:  DEFAULT_BUCKET_ID (Failure Bucket ID prefix)
+            BUCKET_ID
+    Name:   Add
+    Data:   Omit
+    PID:    [Unspecified]
+    TID:    [0x430]
+    Frame:  [0] : ntdll!RtlReportCriticalFailure
+
+    ID:     [0n243]
+    Type:   [DOUBLE_FREE]
+    Class:  Addendum
+    Scope:  DEFAULT_BUCKET_ID (Failure Bucket ID prefix)
+            BUCKET_ID
+    Name:   Add
+    Data:   Omit
+    PID:    [0x584]
+    TID:    [0x430]
+    Frame:  [2] : ntdll!RtlpLogHeapFailure
+
+    ID:     [0n111]
+    Type:   [EXPLOITABLE]
+    Class:  Addendum
+    Scope:  DEFAULT_BUCKET_ID (Failure Bucket ID prefix)
+            BUCKET_ID
+    Name:   Add
+    Data:   Omit
+    PID:    [0x584]
+    TID:    [0x430]
+    Frame:  [0] : ntdll!RtlReportCriticalFailure
+
+BUGCHECK_STR:  HEAP_CORRUPTION_ACTIONABLE_BlockNotBusy_DOUBLE_FREE_EXPLOITABLE
+
+DEFAULT_BUCKET_ID:  HEAP_CORRUPTION_ACTIONABLE_BlockNotBusy_DOUBLE_FREE_EXPLOITABLE
+
+PRIMARY_PROBLEM_CLASS:  HEAP_CORRUPTION
+
+STACK_TEXT:  
+7792ee10 778cd79f ntdll!RtlFreeHeap+0x64
+7792ee14 75f9c614 kernel32!HeapFree+0x14
+7792ee18 013711b4 lec03_crash!wmain+0x1b4
+7792ee1c 013714a2 lec03_crash!__tmainCRTStartup+0xfd
+7792ee20 75f9efac kernel32!BaseThreadInitThunk+0xe
+7792ee24 778b3628 ntdll!__RtlUserThreadStart+0x70
+7792ee28 778b35fb ntdll!_RtlUserThreadStart+0x1b
+
+
+THREAD_SHA1_HASH_MOD:  04d32696c28bba73e8ecff08c600004fe3635f91
+
+FOLLOWUP_IP: 
+lec03_crash!wmain+1b4 [c:\workdir\lecture\lec03\lec03\lec03.cpp @ 163]
+013711b4 85db            test    ebx,ebx
+
+FAULT_INSTR_CODE:  a74db85
+
+FAULTING_SOURCE_LINE:  c:\workdir\lecture\lec03\lec03\lec03.cpp
+
+FAULTING_SOURCE_FILE:  c:\workdir\lecture\lec03\lec03\lec03.cpp
+
+FAULTING_SOURCE_LINE_NUMBER:  163
+
+FAULTING_SOURCE_CODE:  
+No source found for 'c:\workdir\lecture\lec03\lec03\lec03.cpp'
+
+
+SYMBOL_STACK_INDEX:  2
+
+SYMBOL_NAME:  lec03_crash!wmain+1b4
+
+FOLLOWUP_NAME:  MachineOwner
+
+MODULE_NAME: lec03_crash
+
+IMAGE_NAME:  lec03_crash.exe
+
+DEBUG_FLR_IMAGE_TIMESTAMP:  59a4d17f
+
+STACK_COMMAND:  dps 7792ee10 ; kb
+
+BUCKET_ID:  HEAP_CORRUPTION_ACTIONABLE_BlockNotBusy_DOUBLE_FREE_EXPLOITABLE_lec03_crash!wmain+1b4
+
+FAILURE_EXCEPTION_CODE:  c0000374
+
+FAILURE_IMAGE_NAME:  lec03_crash.exe
+
+BUCKET_ID_IMAGE_STR:  lec03_crash.exe
+
+FAILURE_MODULE_NAME:  lec03_crash
+
+BUCKET_ID_MODULE_STR:  lec03_crash
+
+FAILURE_FUNCTION_NAME:  wmain
+
+BUCKET_ID_FUNCTION_STR:  wmain
+
+BUCKET_ID_OFFSET:  1b4
+
+BUCKET_ID_MODTIMEDATESTAMP:  59a4d17f
+
+BUCKET_ID_MODCHECKSUM:  0
+
+BUCKET_ID_MODVER_STR:  0.0.0.0
+
+BUCKET_ID_PREFIX_STR:  HEAP_CORRUPTION_ACTIONABLE_BlockNotBusy_DOUBLE_FREE_EXPLOITABLE_
+
+FAILURE_PROBLEM_CLASS:  HEAP_CORRUPTION
+
+FAILURE_SYMBOL_NAME:  lec03_crash.exe!wmain
+
+FAILURE_BUCKET_ID:  HEAP_CORRUPTION_ACTIONABLE_BlockNotBusy_DOUBLE_FREE_EXPLOITABLE_c0000374_lec03_crash.exe!wmain
+
+TARGET_TIME:  2018-09-06T15:22:09.000Z
+
+OSBUILD:  7601
+
+OSSERVICEPACK:  1
+
+SERVICEPACK_NUMBER: 0
+
+OS_REVISION: 0
+
+OSPLATFORM_TYPE:  x86
+
+OSNAME:  Windows 7
+
+OSEDITION:  Windows 7 WinNt (Service Pack 1) SingleUserTS
+
+USER_LCID:  0
+
+OSBUILD_TIMESTAMP:  2018-06-08 08:57:46
+
+BUILDDATESTAMP_STR:  180801-1700
+
+BUILDLAB_STR:  win7sp1_ldr_escrow
+
+BUILDOSVER_STR:  6.1.7601.24214.x86fre.win7sp1_ldr_escrow.180801-1700
+
+ANALYSIS_SESSION_ELAPSED_TIME:  f81b
+
+ANALYSIS_SOURCE:  UM
+
+FAILURE_ID_HASH_STRING:  um:heap_corruption_actionable_blocknotbusy_double_free_exploitable_c0000374_lec03_crash.exe!wmain
+
+FAILURE_ID_HASH:  {6bcc9379-c541-9f28-52dc-cf713b4f1954}
+
+Followup:     MachineOwner
+---------
+
+0:000> .load MSEC
+0:000> !exploitable
+
+!exploitable 1.6.0.0
+Exploitability Classification: EXPLOITABLE
+Recommended Bug Title: Exploitable - Heap Corruption starting at ntdll!RtlReportCriticalFailure+0x0000000000000057 called from lec03_crash!wmain+0x00000000000001b4 (Hash=0x5c662ae7.0xa674c7ff)
+
+Heap Corruption has been detected. This is considered exploitable, and must be fixed.

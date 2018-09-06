@@ -1,0 +1,16 @@
+0:000> .load pykd
+
+0:000> !py
+Python 2.7.13 (v2.7.13:a06454b1afa1, Dec 17 2016, 20:42:59) [MSC v.1500 32 bit (Intel)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> quit();
+
+0:000> !py C:\Users\IEUser\Desktop\lec03\lec03_pykd-simple.py
+start    end        module name
+01370000 01376000   lec03_crash C (private pdb symbols)  C:\Users\IEUser\Desktop\lec03\lec03_crash.pdb
+67f70000 6805e000   MSVCR120   (deferred)             
+688a0000 68911000   MSVCP120   (deferred)             
+75890000 758db000   KERNELBASE   (deferred)             
+75f50000 76025000   kernel32   (pdb symbols)          c:\symbols\kernel32.pdb\A97970654F3D4D25B524
+0:000> 
