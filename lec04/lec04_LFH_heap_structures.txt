@@ -1,0 +1,231 @@
+0:001> !heap -hl 540000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00540000 
+    Segment at 00540000 to 00580000 (0002a000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000018f
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00540138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   005400a0
+    Uncommitted ranges:   00540090
+    FreeList[ 00 ] at 005400c4: 00569370 . 00569370   (1 block )
+
+    Heap entries for Segment00 in Heap 00540000 
+         address: psize . size  flags   state (requested size)
+        00540000: 00000 . 00588 [101] - busy (587)               // _HEAP base
+        
+            struct _HEAP, 53 elements, 0x138 bytes
+               +0x000 Entry            : struct _HEAP_ENTRY, 19 elements, 0x8 bytes
+               +0x008 SegmentSignature : 0xffeeffee
+               +0x00c SegmentFlags     : 0
+               +0x010 SegmentListEntry : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+             [ 0x5400a8 - 0x5400a8 ]
+               +0x018 Heap             : 0x00540000 struct _HEAP, 53 elements, 0x138 bytes
+               +0x01c BaseAddress      : 0x00540000 Void
+               +0x020 NumberOfPages    : 0x40
+               +0x024 FirstEntry       : 0x00540588 struct _HEAP_ENTRY, 19 elements, 0x8 bytes
+               +0x028 LastValidEntry   : 0x00580000 struct _HEAP_ENTRY, 19 elements, 0x8 bytes
+               +0x02c NumberOfUnCommittedPages : 0x16
+               +0x030 NumberOfUnCommittedRanges : 1
+               +0x034 SegmentAllocatorBackTraceIndex : 0
+               +0x036 Reserved         : 0
+               +0x038 UCRSegmentList   : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+             [ 0x569ff0 - 0x569ff0 ]
+               +0x040 Flags            : 0x1002
+               +0x044 ForceFlags       : 0
+               +0x048 CompatibilityFlags : 0
+               +0x04c EncodeFlagMask   : 0x100000
+               +0x050 Encoding         : struct _HEAP_ENTRY, 19 elements, 0x8 bytes
+               +0x058 PointerKey       : 0x4c878485
+               +0x05c Interceptor      : 0
+               +0x060 VirtualMemoryThreshold : 0xfe00
+               +0x064 Signature        : 0xeeffeeff
+               +0x068 SegmentReserve   : 0x100000
+               +0x06c SegmentCommit    : 0x2000
+               +0x070 DeCommitFreeBlockThreshold : 0x800
+               +0x074 DeCommitTotalFreeThreshold : 0x2000
+               +0x078 TotalFreeSize    : 0x18f
+               +0x07c MaximumAllocationSize : 0x7ffdefff
+               +0x080 ProcessHeapsListIndex : 4
+               +0x082 HeaderValidateLength : 0x138
+               +0x084 HeaderValidateCopy : (null) 
+               +0x088 NextAvailableTagIndex : 0
+               +0x08a MaximumTagIndex  : 0
+               +0x08c TagEntries       : (null) 
+               +0x090 UCRList          : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+               +0x098 AlignRound       : 0xf
+               +0x09c AlignMask        : 0xfffffff8
+               +0x0a0 VirtualAllocdBlocks : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+               +0x0a8 SegmentList      : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+               +0x0b0 AllocatorBackTraceIndex : 0
+               +0x0b4 NonDedicatedListLength : 0
+               +0x0b8 BlocksIndex      : 0x00540150 Void
+               +0x0bc UCRIndex         : 0x00540590 Void
+               +0x0c0 PseudoTagEntries : (null) 
+               +0x0c4 FreeLists        : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+               +0x0cc LockVariable     : 0x00540138 struct _HEAP_LOCK, 1 elements, 0x18 bytes
+               +0x0d0 CommitRoutine    : 0x4c878485     long  +4c878485
+               +0x0d4 FrontEndHeap     : 0x00545678 Void
+               +0x0d8 FrontHeapLockCount : 0
+               +0x0da FrontEndHeapType : 0x2 ''
+               +0x0dc Counters         : struct _HEAP_COUNTERS, 21 elements, 0x54 bytes
+               +0x130 TuningParameters : struct _HEAP_TUNING_PARAMETERS, 2 elements, 0x8 bytes
+
+        00540588: 00588 . 00240 [101] - busy (23f)               // _HEAP.FirstEntry
+        005407c8: 00240 . 00108 [101] - busy (100)
+        005408d0: 00108 . 00108 [101] - busy (100)
+        005409d8: 00108 . 00108 [101] - busy (100)
+        00540ae0: 00108 . 00108 [101] - busy (100)
+        00540be8: 00108 . 00108 [101] - busy (100)
+        00540cf0: 00108 . 00108 [101] - busy (100)
+        00540df8: 00108 . 00108 [101] - busy (100)
+        00540f00: 00108 . 00108 [101] - busy (100)
+        00541008: 00108 . 00108 [101] - busy (100)
+        00541110: 00108 . 00108 [101] - busy (100)
+        00541218: 00108 . 00108 [101] - busy (100)
+        00541320: 00108 . 00108 [101] - busy (100)
+        00541428: 00108 . 00108 [101] - busy (100)
+        00541530: 00108 . 00108 [101] - busy (100)
+        00541638: 00108 . 00108 [101] - busy (100)
+        00541740: 00108 . 00108 [101] - busy (100)
+        00541848: 00108 . 00108 [101] - busy (100)
+        00541950: 00108 . 03d20 [101] - busy (3d1f)
+        00545670: 03d20 . 1d7f0 [101] - busy (1d7e8) Internal     // Purple rectangle in page 36.
+                                                                  // Internal blocks are related of LFH
+                                                                  // _LFH_HEAP base (0x3728 bytes)
+            struct _LFH_HEAP, 16 elements, 0x3728 bytes
+               +0x000 Lock             : struct _RTL_SRWLOCK, 7 elements, 0x4 bytes
+               +0x000 padding          : struct _RTL_CRITICAL_SECTION, 6 elements, 0x18 bytes
+               +0x018 SubSegmentZones  : struct _LIST_ENTRY, 2 elements, 0x8 bytes
+               +0x020 ZoneBlockSize    : 0x20
+               +0x024 Heap             : 0x00540000 Void
+               +0x028 SegmentChange    : 0
+               +0x02c SegmentCreate    : 3
+               +0x030 SegmentInsertInFree : 0
+               +0x034 SegmentDelete    : 0
+               +0x038 CacheAllocs      : 3
+               +0x03c CacheFrees       : 0
+               +0x040 SizeInCache      : 0
+               +0x048 RunInfo          : union _HEAP_BUCKET_RUN_INFO, 3 elements, 0x8 bytes
+               +0x050 UserBlockCache   : [12] struct _USER_MEMORY_CACHE_ENTRY, 2 elements, 0x10 bytes
+               +0x110 Buckets          : [128] struct _HEAP_BUCKET, 4 elements, 0x4 bytes
+               +0x310 LocalData        : [1] struct _HEAP_LOCAL_DATA, 5 elements, 0x3418 bytes
+
+        00562e60: 1d7f0 . 00108 [101] - busy (100)
+        00562f68: 00108 . 02000 [101] - busy (1ff8) Internal      // Userblock
+
+        LFH data region at 00562f70 (subsegment 00564f80):
+            00562f80: 00108 - busy (100)
+            00563088: 00108 - busy (100)
+            00563190: 00108 - busy (100)
+            00563298: 00108 - busy (100)
+            005633a0: 00108 - busy (100)
+            005634a8: 00108 - busy (100)
+            005635b0: 00108 - busy (100)
+            005636b8: 00108 - busy (100)
+            005637c0: 00108 - busy (100)
+            005638c8: 00108 - busy (100)
+            005639d0: 00108 - busy (100)
+            00563ad8: 00108 - busy (100)
+            00563be0: 00108 - busy (100)
+            00563ce8: 00108 - busy (100)
+            00563df0: 00108 - busy (100)
+            00563ef8: 00108 - busy (100)
+            00564000: 00108 - busy (100)
+            00564108: 00108 - busy (100)
+            00564210: 00108 - busy (100)
+            00564318: 00108 - busy (100)
+            00564420: 00108 - busy (100)
+            00564528: 00108 - busy (100)
+            00564630: 00108 - busy (100)
+            00564738: 00108 - busy (100)
+            00564840: 00108 - busy (100)
+            00564948: 00108 - busy (100)
+            00564a50: 00108 - busy (100)
+            00564b58: 00108 - busy (100)
+            00564c60: 00108 - busy (100)
+            00564d68: 00108 - busy (100)
+
+        00564f68: 02000 . 00400 [101] - busy (3f8) Internal       // SubSegment
+        00565368: 00400 . 02000 [101] - busy (1ff8) Internal      // Userblock
+
+        LFH data region at 00565370 (subsegment 00564fa0):
+            00565380: 00108 - busy (100)
+            00565488: 00108 - busy (100)
+            00565590: 00108 - busy (100)
+            00565698: 00108 - busy (100)
+            005657a0: 00108 - busy (100)
+            005658a8: 00108 - busy (100)
+            005659b0: 00108 - busy (100)
+            00565ab8: 00108 - busy (100)
+            00565bc0: 00108 - busy (100)
+            00565cc8: 00108 - busy (100)
+            00565dd0: 00108 - busy (100)
+            00565ed8: 00108 - busy (100)
+            00565fe0: 00108 - busy (100)
+            005660e8: 00108 - busy (100)
+            005661f0: 00108 - busy (100)
+            005662f8: 00108 - busy (100)
+            00566400: 00108 - busy (100)
+            00566508: 00108 - busy (100)
+            00566610: 00108 - busy (100)
+            00566718: 00108 - busy (100)
+            00566820: 00108 - busy (100)
+            00566928: 00108 - busy (100)
+            00566a30: 00108 - busy (100)
+            00566b38: 00108 - busy (100)
+            00566c40: 00108 - busy (100)
+            00566d48: 00108 - busy (100)
+            00566e50: 00108 - busy (100)
+            00566f58: 00108 - busy (100)
+            00567060: 00108 - busy (100)
+            00567168: 00108 - busy (100)
+
+        00567368: 02000 . 02000 [101] - busy (1ff8) Internal      // Userblock
+
+        LFH data region at 00567370 (subsegment 00564fc0):
+            00567380: 00108 - busy (100)
+            00567488: 00108 - busy (100)
+            00567590: 00108 - busy (100)
+            00567698: 00108 - busy (100)
+            005677a0: 00108 - busy (100)
+            005678a8: 00108 - busy (100)
+            005679b0: 00108 - busy (100)
+            00567ab8: 00108 - busy (100)
+            00567bc0: 00108 - busy (100)
+            00567cc8: 00108 - busy (100)
+            00567dd0: 00108 - busy (100)
+            00567ed8: 00108 - busy (100)
+            00567fe0: 00108 - busy (100)
+            005680e8: 00108 - busy (100)
+            005681f0: 00108 - busy (100)
+            005682f8: 00108 - busy (100)
+            00568400: 00108 - busy (100)
+            00568508: 00108 - busy (100)
+            00568610: 00108 - busy (100)
+            00568718: 00108 - busy (100)
+            00568820: 00108 - busy (100)
+            00568928: 00108 - busy (100)
+            00568a30: 00108 - free
+            00568b38: 00108 - free
+            00568c40: 00108 - free
+            00568d48: 00108 - free
+            00568e50: 00108 - free
+            00568f58: 00108 - free
+            00569060: 00108 - free
+            00569168: 00108 - free
+
+        00569368: 02000 . 00c78 [100]
+        00569fe0: 00c78 . 00020 [111] - busy (1d)
+        0056a000:      00016000      - uncommitted bytes.
