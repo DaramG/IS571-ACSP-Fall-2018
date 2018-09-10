@@ -1,0 +1,1523 @@
+---------- lec04_growable_heap.exe ----------
+A size-growable heap was created : 0x470000
+Let's allocate 100 chunks(size 0x100) <press enter key>
+---------------------------------------------
+
+0:001> !address /f:Heap
+
+Mapping file section regions...
+Mapping module regions...
+Mapping PEB regions...
+Mapping TEB and stack regions...
+Mapping heap regions...
+Mapping page heap regions...
+Mapping other regions...
+Mapping stack trace database regions...
+Mapping activation context regions...
+
+  BaseAddr EndAddr+1 RgnSize     Type       State                 Protect             Usage
+-----------------------------------------------------------------------------------------------
+   10000    20000    10000 MEM_MAPPED  MEM_COMMIT  PAGE_READWRITE                     Heap       [ID: 1; Handle: 00010000; Type: Segment]
+   20000    30000    10000 MEM_MAPPED  MEM_COMMIT  PAGE_READWRITE                     Heap       [ID: 2; Handle: 00020000; Type: Segment]
+   60000    a4000    44000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     Heap       [ID: 0; Handle: 00060000; Type: Segment]
+   a4000   160000    bc000 MEM_PRIVATE MEM_RESERVE                                    Heap       [ID: 0; Handle: 00060000; Type: Segment]
+  470000   471000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     Heap       [ID: 3; Handle: 00470000; Type: Segment]
+  471000   4b0000    3f000 MEM_PRIVATE MEM_RESERVE                                    Heap       [ID: 3; Handle: 00470000; Type: Segment]
+
+0:001> !heap
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  1:   00060000                
+  2:   00010000                
+  3:   00020000                
+  4:   00470000     
+
+0:001> !heap -h
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  1:   00060000 
+    Segment at 00060000 to 00160000 (00044000 bytes committed)
+  2:   00010000 
+    Segment at 00010000 to 00020000 (00001000 bytes committed)
+  3:   00020000 
+    Segment at 00020000 to 00030000 (00010000 bytes committed)
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00001000 bytes committed)
+
+0:001> !heap -s
+SEGMENT HEAP ERROR: failed to initialize the extention
+LFH Key                   : 0x3c18db66
+Termination on corruption : ENABLED
+  Heap     Flags   Reserv  Commit  Virt   Free  List   UCR  Virt  Lock  Fast 
+                    (k)     (k)    (k)     (k) length      blocks cont. heap 
+-----------------------------------------------------------------------------
+00060000 00000002    1024    272   1024      4     2     1    0      0   LFH
+00010000 00008000      64      4     64      2     1     1    0      0      
+00020000 00008000      64     64     64     54     1     1    0      0      
+00470000 00001002     256      4    256      2     1     1    0      0      
+-----------------------------------------------------------------------------
+
+0:001> dt _HEAP 00470000 
+ntdll!_HEAP
+   +0x000 Entry            : _HEAP_ENTRY
+   +0x008 SegmentSignature : 0xffeeffee
+   +0x00c SegmentFlags     : 0
+   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x4700a8 - 0x4700a8 ]
+   +0x018 Heap             : 0x00470000 _HEAP
+   +0x01c BaseAddress      : 0x00470000 Void
+   +0x020 NumberOfPages    : 0x40
+   +0x024 FirstEntry       : 0x00470588 _HEAP_ENTRY
+   +0x028 LastValidEntry   : 0x004b0000 _HEAP_ENTRY
+   +0x02c NumberOfUnCommittedPages : 0x3f
+   +0x030 NumberOfUnCommittedRanges : 1
+   +0x034 SegmentAllocatorBackTraceIndex : 0
+   +0x036 Reserved         : 0
+   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x470ff0 - 0x470ff0 ]
+   +0x040 Flags            : 0x1002
+   +0x044 ForceFlags       : 0
+   +0x048 CompatibilityFlags : 0
+   +0x04c EncodeFlagMask   : 0x100000
+   +0x050 Encoding         : _HEAP_ENTRY
+   +0x058 PointerKey       : 0xc58fa9c
+   +0x05c Interceptor      : 0
+   +0x060 VirtualMemoryThreshold : 0xfe00
+   +0x064 Signature        : 0xeeffeeff
+   +0x068 SegmentReserve   : 0x100000
+   +0x06c SegmentCommit    : 0x2000
+   +0x070 DeCommitFreeBlockThreshold : 0x200
+   +0x074 DeCommitTotalFreeThreshold : 0x2000
+   +0x078 TotalFreeSize    : 0x103
+   +0x07c MaximumAllocationSize : 0x7ffdefff
+   +0x080 ProcessHeapsListIndex : 4
+   +0x082 HeaderValidateLength : 0x138
+   +0x084 HeaderValidateCopy : (null) 
+   +0x088 NextAvailableTagIndex : 0
+   +0x08a MaximumTagIndex  : 0
+   +0x08c TagEntries       : (null) 
+   +0x090 UCRList          : _LIST_ENTRY [ 0x470fe8 - 0x470fe8 ]
+   +0x098 AlignRound       : 0xf
+   +0x09c AlignMask        : 0xfffffff8
+   +0x0a0 VirtualAllocdBlocks : _LIST_ENTRY [ 0x4700a0 - 0x4700a0 ]
+   +0x0a8 SegmentList      : _LIST_ENTRY [ 0x470010 - 0x470010 ]
+   +0x0b0 AllocatorBackTraceIndex : 0
+   +0x0b4 NonDedicatedListLength : 0
+   +0x0b8 BlocksIndex      : 0x00470150 Void
+   +0x0bc UCRIndex         : 0x00470590 Void
+   +0x0c0 PseudoTagEntries : (null) 
+   +0x0c4 FreeLists        : _LIST_ENTRY [ 0x4707d0 - 0x4707d0 ]
+   +0x0cc LockVariable     : 0x00470138 _HEAP_LOCK
+   +0x0d0 CommitRoutine    : 0x0c58fa9c     long  +c58fa9c
+   +0x0d4 FrontEndHeap     : (null) 
+   +0x0d8 FrontHeapLockCount : 0
+   +0x0da FrontEndHeapType : 0 ''
+   +0x0dc Counters         : _HEAP_COUNTERS
+   +0x130 TuningParameters : _HEAP_TUNING_PARAMETERS
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x4707d0
+A heap chunk was allocated : 0x4708d8
+A heap chunk was allocated : 0x4709e0
+A heap chunk was allocated : 0x470ae8
+A heap chunk was allocated : 0x470bf0
+A heap chunk was allocated : 0x470cf8
+A heap chunk was allocated : 0x470e00
+A heap chunk was allocated : 0x470f08
+A heap chunk was allocated : 0x471010
+A heap chunk was allocated : 0x471118
+A heap chunk was allocated : 0x471220
+A heap chunk was allocated : 0x471328
+A heap chunk was allocated : 0x471430
+A heap chunk was allocated : 0x471538
+A heap chunk was allocated : 0x471640
+A heap chunk was allocated : 0x471748
+A heap chunk was allocated : 0x471850
+<press enter key>
+---------------------------------------------
+
+(1bc.13c8): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=005ffe7c ebp=005ffea8 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> dt _HEAP 00470000 
+ntdll!_HEAP
+   +0x000 Entry            : _HEAP_ENTRY
+   +0x008 SegmentSignature : 0xffeeffee
+   +0x00c SegmentFlags     : 0
+   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x4700a8 - 0x4700a8 ]
+   +0x018 Heap             : 0x00470000 _HEAP
+   +0x01c BaseAddress      : 0x00470000 Void
+   +0x020 NumberOfPages    : 0x40
+   +0x024 FirstEntry       : 0x00470588 _HEAP_ENTRY
+   +0x028 LastValidEntry   : 0x004b0000 _HEAP_ENTRY
+   +0x02c NumberOfUnCommittedPages : 0x3e
+   +0x030 NumberOfUnCommittedRanges : 1
+   +0x034 SegmentAllocatorBackTraceIndex : 0
+   +0x036 Reserved         : 0
+   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x471ff0 - 0x471ff0 ]
+   +0x040 Flags            : 0x1002
+   +0x044 ForceFlags       : 0
+   +0x048 CompatibilityFlags : 0x20000000
+   +0x04c EncodeFlagMask   : 0x100000
+   +0x050 Encoding         : _HEAP_ENTRY
+   +0x058 PointerKey       : 0xc58fa9c
+   +0x05c Interceptor      : 0
+   +0x060 VirtualMemoryThreshold : 0xfe00
+   +0x064 Signature        : 0xeeffeeff
+   +0x068 SegmentReserve   : 0x100000
+   +0x06c SegmentCommit    : 0x2000
+   +0x070 DeCommitFreeBlockThreshold : 0x200
+   +0x074 DeCommitTotalFreeThreshold : 0x2000
+   +0x078 TotalFreeSize    : 0xd2
+   +0x07c MaximumAllocationSize : 0x7ffdefff
+   +0x080 ProcessHeapsListIndex : 4
+   +0x082 HeaderValidateLength : 0x138
+   +0x084 HeaderValidateCopy : (null) 
+   +0x088 NextAvailableTagIndex : 0
+   +0x08a MaximumTagIndex  : 0
+   +0x08c TagEntries       : (null) 
+   +0x090 UCRList          : _LIST_ENTRY [ 0x471fe8 - 0x471fe8 ]
+   +0x098 AlignRound       : 0xf
+   +0x09c AlignMask        : 0xfffffff8
+   +0x0a0 VirtualAllocdBlocks : _LIST_ENTRY [ 0x4700a0 - 0x4700a0 ]
+   +0x0a8 SegmentList      : _LIST_ENTRY [ 0x470010 - 0x470010 ]
+   +0x0b0 AllocatorBackTraceIndex : 0
+   +0x0b4 NonDedicatedListLength : 0
+   +0x0b8 BlocksIndex      : 0x00470150 Void
+   +0x0bc UCRIndex         : 0x00470590 Void
+   +0x0c0 PseudoTagEntries : (null) 
+   +0x0c4 FreeLists        : _LIST_ENTRY [ 0x471958 - 0x471958 ]
+   +0x0cc LockVariable     : 0x00470138 _HEAP_LOCK
+   +0x0d0 CommitRoutine    : 0x0c58fa9c     long  +c58fa9c
+   +0x0d4 FrontEndHeap     : (null) 
+   +0x0d8 FrontHeapLockCount : 0
+   +0x0da FrontEndHeapType : 0 ''
+   +0x0dc Counters         : _HEAP_COUNTERS
+   +0x130 TuningParameters : _HEAP_TUNING_PARAMETERS
+
+0:001> !heap -s
+SEGMENT HEAP ERROR: failed to initialize the extention
+LFH Key                   : 0x3c18db66
+Termination on corruption : ENABLED
+  Heap     Flags   Reserv  Commit  Virt   Free  List   UCR  Virt  Lock  Fast 
+                    (k)     (k)    (k)     (k) length      blocks cont. heap 
+-----------------------------------------------------------------------------
+00060000 00000002    1024    272   1024      4     2     1    0      0   LFH
+00010000 00008000      64      4     64      2     1     1    0      0      
+00020000 00008000      64     64     64     54     1     1    0      0      
+00470000 00001002     256      8    256      1     1     1    0      0      
+-----------------------------------------------------------------------------
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x4acf28
+<press enter key>
+---------------------------------------------
+
+(1bc.1448): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=0068fb44 ebp=0068fb70 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -s
+SEGMENT HEAP ERROR: failed to initialize the extention
+LFH Key                   : 0x3c18db66
+Termination on corruption : ENABLED
+  Heap     Flags   Reserv  Commit  Virt   Free  List   UCR  Virt  Lock  Fast 
+                    (k)     (k)    (k)     (k) length      blocks cont. heap 
+-----------------------------------------------------------------------------
+00060000 00000002    1024    272   1024      4     2     1    0      0   LFH
+00010000 00008000      64      4     64      2     1     1    0      0      
+00020000 00008000      64     64     64     54     1     1    0      0      
+00470000 00001002     256    248    256      3     1     1    0      0   LFH
+-----------------------------------------------------------------------------
+
+0:001> dt _HEAP 00470000 
+ntdll!_HEAP
+   +0x000 Entry            : _HEAP_ENTRY
+   +0x008 SegmentSignature : 0xffeeffee
+   +0x00c SegmentFlags     : 0
+   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x4700a8 - 0x4700a8 ]
+   +0x018 Heap             : 0x00470000 _HEAP
+   +0x01c BaseAddress      : 0x00470000 Void
+   +0x020 NumberOfPages    : 0x40
+   +0x024 FirstEntry       : 0x00470588 _HEAP_ENTRY
+   +0x028 LastValidEntry   : 0x004b0000 _HEAP_ENTRY
+   +0x02c NumberOfUnCommittedPages : 2
+   +0x030 NumberOfUnCommittedRanges : 1
+   +0x034 SegmentAllocatorBackTraceIndex : 0
+   +0x036 Reserved         : 0
+   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x4adff0 - 0x4adff0 ]
+   +0x040 Flags            : 0x1002
+   +0x044 ForceFlags       : 0
+   +0x048 CompatibilityFlags : 0
+   +0x04c EncodeFlagMask   : 0x100000
+   +0x050 Encoding         : _HEAP_ENTRY
+   +0x058 PointerKey       : 0xc58fa9c
+   +0x05c Interceptor      : 0
+   +0x060 VirtualMemoryThreshold : 0xfe00
+   +0x064 Signature        : 0xeeffeeff
+   +0x068 SegmentReserve   : 0x100000
+   +0x06c SegmentCommit    : 0x2000
+   +0x070 DeCommitFreeBlockThreshold : 0x800
+   +0x074 DeCommitTotalFreeThreshold : 0x2000
+   +0x078 TotalFreeSize    : 0x1f7
+   +0x07c MaximumAllocationSize : 0x7ffdefff
+   +0x080 ProcessHeapsListIndex : 4
+   +0x082 HeaderValidateLength : 0x138
+   +0x084 HeaderValidateCopy : (null) 
+   +0x088 NextAvailableTagIndex : 0
+   +0x08a MaximumTagIndex  : 0
+   +0x08c TagEntries       : (null) 
+   +0x090 UCRList          : _LIST_ENTRY [ 0x4adfe8 - 0x4adfe8 ]
+   +0x098 AlignRound       : 0xf
+   +0x09c AlignMask        : 0xfffffff8
+   +0x0a0 VirtualAllocdBlocks : _LIST_ENTRY [ 0x4700a0 - 0x4700a0 ]
+   +0x0a8 SegmentList      : _LIST_ENTRY [ 0x470010 - 0x470010 ]
+   +0x0b0 AllocatorBackTraceIndex : 0
+   +0x0b4 NonDedicatedListLength : 0
+   +0x0b8 BlocksIndex      : 0x00470150 Void
+   +0x0bc UCRIndex         : 0x00470590 Void
+   +0x0c0 PseudoTagEntries : (null) 
+   +0x0c4 FreeLists        : _LIST_ENTRY [ 0x4ad030 - 0x4ad030 ]
+   +0x0cc LockVariable     : 0x00470138 _HEAP_LOCK
+   +0x0d0 CommitRoutine    : 0x0c58fa9c     long  +c58fa9c
+   +0x0d4 FrontEndHeap     : 0x00475678 Void
+   +0x0d8 FrontHeapLockCount : 0
+   +0x0da FrontEndHeapType : 0x2 ''
+   +0x0dc Counters         : _HEAP_COUNTERS
+   +0x130 TuningParameters : _HEAP_TUNING_PARAMETERS
+
+0:001> dt _LFH_HEAP 0x00475678 
+ntdll!_LFH_HEAP
+   +0x000 Lock             : _RTL_SRWLOCK
+   +0x000 padding          : _RTL_CRITICAL_SECTION
+   +0x018 SubSegmentZones  : _LIST_ENTRY [ 0x475690 - 0x475690 ]
+   +0x020 ZoneBlockSize    : 0x20
+   +0x024 Heap             : 0x00470000 Void
+   +0x028 SegmentChange    : 0
+   +0x02c SegmentCreate    : 0
+   +0x030 SegmentInsertInFree : 0
+   +0x034 SegmentDelete    : 0
+   +0x038 CacheAllocs      : 0
+   +0x03c CacheFrees       : 0
+   +0x040 SizeInCache      : 0
+   +0x048 RunInfo          : _HEAP_BUCKET_RUN_INFO
+   +0x050 UserBlockCache   : [12] _USER_MEMORY_CACHE_ENTRY
+   +0x110 Buckets          : [128] _HEAP_BUCKET
+   +0x310 LocalData        : [1] _HEAP_LOCAL_DATA
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+...
+A heap chunk was allocated : 0x303500
+A heap chunk was allocated : 0x303608
+100 chunks are allocated <press enter key>
+---------------------------------------------
+
+(1bc.141c): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=005bfe4c ebp=005bfe78 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -h 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00040000 bytes committed)
+    Segment at 00300000 to 00400000 (00005000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00200000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000036b
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00470138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004700a0
+    Uncommitted ranges:   00470090
+    FreeList[ 00 ] at 004700c4: 00304048 . 004af430   (2 blocks)
+
+    Heap entries for Segment00 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00470000: 00000 . 00588 [101] - busy (587)
+        00470588: 00588 . 00240 [101] - busy (23f)
+        004707c8: 00240 . 00108 [101] - busy (100)
+        004708d0: 00108 . 00108 [101] - busy (100)
+        004709d8: 00108 . 00108 [101] - busy (100)
+        00470ae0: 00108 . 00108 [101] - busy (100)
+        00470be8: 00108 . 00108 [101] - busy (100)
+        00470cf0: 00108 . 00108 [101] - busy (100)
+        00470df8: 00108 . 00108 [101] - busy (100)
+        00470f00: 00108 . 00108 [101] - busy (100)
+        00471008: 00108 . 00108 [101] - busy (100)
+        00471110: 00108 . 00108 [101] - busy (100)
+        00471218: 00108 . 00108 [101] - busy (100)
+        00471320: 00108 . 00108 [101] - busy (100)
+        00471428: 00108 . 00108 [101] - busy (100)
+        00471530: 00108 . 00108 [101] - busy (100)
+        00471638: 00108 . 00108 [101] - busy (100)
+        00471740: 00108 . 00108 [101] - busy (100)
+        00471848: 00108 . 00108 [101] - busy (100)
+        00471950: 00108 . 03d20 [101] - busy (3d1f)
+        00475670: 03d20 . 378b0 [101] - busy (378a8) Internal 
+        004acf20: 378b0 . 00108 [101] - busy (100)
+        004ad028: 00108 . 02000 [101] - busy (1ff8) Internal 
+        004af028: 02000 . 00400 [101] - busy (3f8) Internal 
+        004af428: 00400 . 00bb8 [100]
+        004affe0: 00bb8 . 00020 [111] - busy (1d)
+        004b0000:      00000000      - uncommitted bytes.
+    Heap entries for Segment01 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00300000: 00000 . 00040 [101] - busy (3f)
+        00300040: 00040 . 02000 [101] - busy (1ff8) Internal 
+        00302040: 02000 . 02000 [101] - busy (1ff8) Internal 
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> !heap -hl 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00040000 bytes committed)
+    Segment at 00300000 to 00400000 (00005000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00200000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000036b
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00470138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004700a0
+    Uncommitted ranges:   00470090
+    FreeList[ 00 ] at 004700c4: 00304048 . 004af430   (2 blocks)
+
+    Heap entries for Segment00 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00470000: 00000 . 00588 [101] - busy (587)
+        00470588: 00588 . 00240 [101] - busy (23f)
+        004707c8: 00240 . 00108 [101] - busy (100)
+        004708d0: 00108 . 00108 [101] - busy (100)
+        004709d8: 00108 . 00108 [101] - busy (100)
+        00470ae0: 00108 . 00108 [101] - busy (100)
+        00470be8: 00108 . 00108 [101] - busy (100)
+        00470cf0: 00108 . 00108 [101] - busy (100)
+        00470df8: 00108 . 00108 [101] - busy (100)
+        00470f00: 00108 . 00108 [101] - busy (100)
+        00471008: 00108 . 00108 [101] - busy (100)
+        00471110: 00108 . 00108 [101] - busy (100)
+        00471218: 00108 . 00108 [101] - busy (100)
+        00471320: 00108 . 00108 [101] - busy (100)
+        00471428: 00108 . 00108 [101] - busy (100)
+        00471530: 00108 . 00108 [101] - busy (100)
+        00471638: 00108 . 00108 [101] - busy (100)
+        00471740: 00108 . 00108 [101] - busy (100)
+        00471848: 00108 . 00108 [101] - busy (100)
+        00471950: 00108 . 03d20 [101] - busy (3d1f)
+        00475670: 03d20 . 378b0 [101] - busy (378a8) Internal 
+        004acf20: 378b0 . 00108 [101] - busy (100)
+        004ad028: 00108 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 004ad030 (subsegment 004af040):
+            004ad040: 00108 - busy (100)
+            004ad148: 00108 - busy (100)
+            004ad250: 00108 - busy (100)
+            004ad358: 00108 - busy (100)
+            004ad460: 00108 - busy (100)
+            004ad568: 00108 - busy (100)
+            004ad670: 00108 - busy (100)
+            004ad778: 00108 - busy (100)
+            004ad880: 00108 - busy (100)
+            004ad988: 00108 - busy (100)
+            004ada90: 00108 - busy (100)
+            004adb98: 00108 - busy (100)
+            004adca0: 00108 - busy (100)
+            004adda8: 00108 - busy (100)
+            004adeb0: 00108 - busy (100)
+            004adfb8: 00108 - busy (100)
+            004ae0c0: 00108 - busy (100)
+            004ae1c8: 00108 - busy (100)
+            004ae2d0: 00108 - busy (100)
+            004ae3d8: 00108 - busy (100)
+            004ae4e0: 00108 - busy (100)
+            004ae5e8: 00108 - busy (100)
+            004ae6f0: 00108 - busy (100)
+            004ae7f8: 00108 - busy (100)
+            004ae900: 00108 - busy (100)
+            004aea08: 00108 - busy (100)
+            004aeb10: 00108 - busy (100)
+            004aec18: 00108 - busy (100)
+            004aed20: 00108 - busy (100)
+            004aee28: 00108 - busy (100)
+
+        004af028: 02000 . 00400 [101] - busy (3f8) Internal 
+        004af428: 00400 . 00bb8 [100]
+        004affe0: 00bb8 . 00020 [111] - busy (1d)
+        004b0000:      00000000      - uncommitted bytes.
+    Heap entries for Segment01 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00300000: 00000 . 00040 [101] - busy (3f)
+        00300040: 00040 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 00300048 (subsegment 004af060):
+            00300058: 00108 - busy (100)
+            00300160: 00108 - busy (100)
+            00300268: 00108 - busy (100)
+            00300370: 00108 - busy (100)
+            00300478: 00108 - busy (100)
+            00300580: 00108 - busy (100)
+            00300688: 00108 - busy (100)
+            00300790: 00108 - busy (100)
+            00300898: 00108 - busy (100)
+            003009a0: 00108 - busy (100)
+            00300aa8: 00108 - busy (100)
+            00300bb0: 00108 - busy (100)
+            00300cb8: 00108 - busy (100)
+            00300dc0: 00108 - busy (100)
+            00300ec8: 00108 - busy (100)
+            00300fd0: 00108 - busy (100)
+            003010d8: 00108 - busy (100)
+            003011e0: 00108 - busy (100)
+            003012e8: 00108 - busy (100)
+            003013f0: 00108 - busy (100)
+            003014f8: 00108 - busy (100)
+            00301600: 00108 - busy (100)
+            00301708: 00108 - busy (100)
+            00301810: 00108 - busy (100)
+            00301918: 00108 - busy (100)
+            00301a20: 00108 - busy (100)
+            00301b28: 00108 - busy (100)
+            00301c30: 00108 - busy (100)
+            00301d38: 00108 - busy (100)
+            00301e40: 00108 - busy (100)
+
+        00302040: 02000 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 00302048 (subsegment 004af080):
+            00302058: 00108 - busy (100)
+            00302160: 00108 - busy (100)
+            00302268: 00108 - busy (100)
+            00302370: 00108 - busy (100)
+            00302478: 00108 - busy (100)
+            00302580: 00108 - busy (100)
+            00302688: 00108 - busy (100)
+            00302790: 00108 - busy (100)
+            00302898: 00108 - busy (100)
+            003029a0: 00108 - busy (100)
+            00302aa8: 00108 - busy (100)
+            00302bb0: 00108 - busy (100)
+            00302cb8: 00108 - busy (100)
+            00302dc0: 00108 - busy (100)
+            00302ec8: 00108 - busy (100)
+            00302fd0: 00108 - busy (100)
+            003030d8: 00108 - busy (100)
+            003031e0: 00108 - busy (100)
+            003032e8: 00108 - busy (100)
+            003033f0: 00108 - busy (100)
+            003034f8: 00108 - busy (100)
+            00303600: 00108 - busy (100)
+            00303708: 00108 - free
+            00303810: 00108 - free
+            00303918: 00108 - free
+            00303a20: 00108 - free
+            00303b28: 00108 - free
+            00303c30: 00108 - free
+            00303d38: 00108 - free
+            00303e40: 00108 - free
+
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> dt _HEAP 00470000 
+ntdll!_HEAP
+   +0x000 Entry            : _HEAP_ENTRY
+   +0x008 SegmentSignature : 0xffeeffee
+   +0x00c SegmentFlags     : 0
+   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x300010 - 0x4700a8 ]
+   +0x018 Heap             : 0x00470000 _HEAP
+   +0x01c BaseAddress      : 0x00470000 Void
+   +0x020 NumberOfPages    : 0x40
+   +0x024 FirstEntry       : 0x00470588 _HEAP_ENTRY
+   +0x028 LastValidEntry   : 0x004b0000 _HEAP_ENTRY
+   +0x02c NumberOfUnCommittedPages : 0
+   +0x030 NumberOfUnCommittedRanges : 1
+   +0x034 SegmentAllocatorBackTraceIndex : 0
+   +0x036 Reserved         : 0
+   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x4afff0 - 0x4afff0 ]
+   +0x040 Flags            : 0x1002
+   +0x044 ForceFlags       : 0
+   +0x048 CompatibilityFlags : 0
+   +0x04c EncodeFlagMask   : 0x100000
+   +0x050 Encoding         : _HEAP_ENTRY
+   +0x058 PointerKey       : 0xc58fa9c
+   +0x05c Interceptor      : 0
+   +0x060 VirtualMemoryThreshold : 0xfe00
+   +0x064 Signature        : 0xeeffeeff
+   +0x068 SegmentReserve   : 0x200000
+   +0x06c SegmentCommit    : 0x2000
+   +0x070 DeCommitFreeBlockThreshold : 0x800
+   +0x074 DeCommitTotalFreeThreshold : 0x2000
+   +0x078 TotalFreeSize    : 0x36b
+   +0x07c MaximumAllocationSize : 0x7ffdefff
+   +0x080 ProcessHeapsListIndex : 4
+   +0x082 HeaderValidateLength : 0x138
+   +0x084 HeaderValidateCopy : (null) 
+   +0x088 NextAvailableTagIndex : 0
+   +0x08a MaximumTagIndex  : 0
+   +0x08c TagEntries       : (null) 
+   +0x090 UCRList          : _LIST_ENTRY [ 0x304fe8 - 0x304fe8 ]
+   +0x098 AlignRound       : 0xf
+   +0x09c AlignMask        : 0xfffffff8
+   +0x0a0 VirtualAllocdBlocks : _LIST_ENTRY [ 0x4700a0 - 0x4700a0 ]
+   +0x0a8 SegmentList      : _LIST_ENTRY [ 0x470010 - 0x300010 ]
+   +0x0b0 AllocatorBackTraceIndex : 0
+   +0x0b4 NonDedicatedListLength : 0
+   +0x0b8 BlocksIndex      : 0x00470150 Void
+   +0x0bc UCRIndex         : 0x00470590 Void
+   +0x0c0 PseudoTagEntries : (null) 
+   +0x0c4 FreeLists        : _LIST_ENTRY [ 0x4af430 - 0x304048 ]
+   +0x0cc LockVariable     : 0x00470138 _HEAP_LOCK
+   +0x0d0 CommitRoutine    : 0x0c58fa9c     long  +c58fa9c
+   +0x0d4 FrontEndHeap     : 0x00475678 Void
+   +0x0d8 FrontHeapLockCount : 0
+   +0x0da FrontEndHeapType : 0x2 ''
+   +0x0dc Counters         : _HEAP_COUNTERS
+   +0x130 TuningParameters : _HEAP_TUNING_PARAMETERS
+
+0:001> dt _LFH_HEAP 0x00475678 
+ntdll!_LFH_HEAP
+   +0x000 Lock             : _RTL_SRWLOCK
+   +0x000 padding          : _RTL_CRITICAL_SECTION
+   +0x018 SubSegmentZones  : _LIST_ENTRY [ 0x4af030 - 0x4af030 ]
+   +0x020 ZoneBlockSize    : 0x20
+   +0x024 Heap             : 0x00470000 Void
+   +0x028 SegmentChange    : 0
+   +0x02c SegmentCreate    : 3
+   +0x030 SegmentInsertInFree : 0
+   +0x034 SegmentDelete    : 0
+   +0x038 CacheAllocs      : 3
+   +0x03c CacheFrees       : 0
+   +0x040 SizeInCache      : 0
+   +0x048 RunInfo          : _HEAP_BUCKET_RUN_INFO
+   +0x050 UserBlockCache   : [12] _USER_MEMORY_CACHE_ENTRY
+   +0x110 Buckets          : [128] _HEAP_BUCKET
+   +0x310 LocalData        : [1] _HEAP_LOCAL_DATA
+
+0:001> dt _LFH_HEAP poi(470000 + d4) 
+ntdll!_LFH_HEAP
+   +0x000 Lock             : _RTL_SRWLOCK
+   +0x000 padding          : _RTL_CRITICAL_SECTION
+   +0x018 SubSegmentZones  : _LIST_ENTRY [ 0x4af030 - 0x4af030 ]
+   +0x020 ZoneBlockSize    : 0x20
+   +0x024 Heap             : 0x00470000 Void
+   +0x028 SegmentChange    : 0
+   +0x02c SegmentCreate    : 3
+   +0x030 SegmentInsertInFree : 0
+   +0x034 SegmentDelete    : 0
+   +0x038 CacheAllocs      : 3
+   +0x03c CacheFrees       : 0
+   +0x040 SizeInCache      : 0
+   +0x048 RunInfo          : _HEAP_BUCKET_RUN_INFO
+   +0x050 UserBlockCache   : [12] _USER_MEMORY_CACHE_ENTRY
+   +0x110 Buckets          : [128] _HEAP_BUCKET
+   +0x310 LocalData        : [1] _HEAP_LOCAL_DATA
+
+0:001> dt _HEAP_LOCAL_DATA (poi(470000 + d4) + 310)
+ntdll!_HEAP_LOCAL_DATA
+   +0x000 DeletedSubSegments : _SLIST_HEADER
+   +0x008 CrtZone          : 0x004af030 _LFH_BLOCK_ZONE
+   +0x00c LowFragHeap      : 0x00475678 _LFH_HEAP
+   +0x010 Sequence         : 3
+   +0x018 SegmentInfo      : [128] _HEAP_LOCAL_SEGMENT_INFO
+
+0:001> dt _HEAP_LOCAL_SEGMENT_INFO ((poi(470000 + d4) + 310) + 18)
+ntdll!_HEAP_LOCAL_SEGMENT_INFO
+   +0x000 Hint             : (null) 
+   +0x004 ActiveSubsegment : (null) 
+   +0x008 CachedItems      : [16] (null) 
+   +0x048 SListHeader      : _SLIST_HEADER
+   +0x050 Counters         : _HEAP_BUCKET_COUNTERS
+   +0x058 LocalData        : (null) 
+   +0x05c LastOpSequence   : 0
+   +0x060 BucketIndex      : 0
+   +0x062 LastUsed         : 0
+
+0:001> ??sizeof(_HEAP_LOCAL_SEGMENT_INFO)
+unsigned int 0x68
+
+0:001> dt _HEAP_LOCAL_SEGMENT_INFO (((poi(470000 + d4) + 310) + 18) + 68 * 0n32)
+ntdll!_HEAP_LOCAL_SEGMENT_INFO
+   +0x000 Hint             : (null) 
+   +0x004 ActiveSubsegment : 0x004af080 _HEAP_SUBSEGMENT
+   +0x008 CachedItems      : [16] (null) 
+   +0x048 SListHeader      : _SLIST_HEADER
+   +0x050 Counters         : _HEAP_BUCKET_COUNTERS
+   +0x058 LocalData        : 0x00475988 _HEAP_LOCAL_DATA
+   +0x05c LastOpSequence   : 3
+   +0x060 BucketIndex      : 0x20
+   +0x062 LastUsed         : 0
+
+0:001> dt _HEAP_SUBSEGMENT 0x004af080 
+ntdll!_HEAP_SUBSEGMENT
+   +0x000 LocalInfo        : 0x004766a0 _HEAP_LOCAL_SEGMENT_INFO
+   +0x004 UserBlocks       : 0x00302048 _HEAP_USERDATA_HEADER
+   +0x008 AggregateExchg   : _INTERLOCK_SEQ
+   +0x010 BlockSize        : 0x21
+   +0x012 Flags            : 0
+   +0x014 BlockCount       : 0x1e
+   +0x016 SizeIndex        : 0x20 ' '
+   +0x017 AffinityIndex    : 0 ''
+   +0x010 Alignment        : [2] 0x21
+   +0x018 SFreeListEntry   : _SINGLE_LIST_ENTRY
+   +0x01c Lock             : 7
+   
+0:001> dt _HEAP_USERDATA_HEADER 0x00302048 
+ntdll!_HEAP_USERDATA_HEADER
+   +0x000 SFreeListEntry   : _SINGLE_LIST_ENTRY
+   +0x000 SubSegment       : 0x004af080 _HEAP_SUBSEGMENT
+   +0x004 Reserved         : 0x004af430 Void
+   +0x008 SizeIndex        : 0xd
+   +0x00c Signature        : 0xf0e0d0c0     // Signature of UserBlocks
+
+0:001> dt _INTERLOCK_SEQ (0x004af080 + 8)
+ntdll!_INTERLOCK_SEQ
+   +0x000 Depth            : 8              // Allocatable UserBlocks
+   +0x002 FreeEntryOffset  : 0x2d8          // Next offset 
+   +0x000 OffsetAndDepth   : 0x2d80008
+   +0x004 Sequence         : 1
+   +0x000 Exchg            : 0n4342677512
+
+0:001> !heap -i 00302058
+SEGMENT HEAP ERROR: failed to initialize the extention
+Detailed information for block entry 00302058
+Assumed heap       : 0x00470000 (Use !heap -i NewHeapHandle to change)
+Header content     : 0x3C132FED 0x88000000
+Block flags        : 0x1 LFH (busy )
+Total block size   : 0x21 units (0x108 bytes)
+Requested size     : 0x100 bytes (unused 0x8 bytes)
+Subsegment         : 0x004af080
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+17th chunk(0x4acf28) was deallocated
+---------------------------------------------
+
+(1bc.1d0): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=008eff5c ebp=008eff88 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -h 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00040000 bytes committed)
+    Segment at 00300000 to 00400000 (00005000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00200000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000038c
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00470138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004700a0
+    Uncommitted ranges:   00470090
+    FreeList[ 00 ] at 004700c4: 00304048 . 004acf28   (3 blocks)
+
+    Heap entries for Segment00 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00470000: 00000 . 00588 [101] - busy (587)
+        00470588: 00588 . 00240 [101] - busy (23f)
+        004707c8: 00240 . 00108 [101] - busy (100)
+        004708d0: 00108 . 00108 [101] - busy (100)
+        004709d8: 00108 . 00108 [101] - busy (100)
+        00470ae0: 00108 . 00108 [101] - busy (100)
+        00470be8: 00108 . 00108 [101] - busy (100)
+        00470cf0: 00108 . 00108 [101] - busy (100)
+        00470df8: 00108 . 00108 [101] - busy (100)
+        00470f00: 00108 . 00108 [101] - busy (100)
+        00471008: 00108 . 00108 [101] - busy (100)
+        00471110: 00108 . 00108 [101] - busy (100)
+        00471218: 00108 . 00108 [101] - busy (100)
+        00471320: 00108 . 00108 [101] - busy (100)
+        00471428: 00108 . 00108 [101] - busy (100)
+        00471530: 00108 . 00108 [101] - busy (100)
+        00471638: 00108 . 00108 [101] - busy (100)
+        00471740: 00108 . 00108 [101] - busy (100)
+        00471848: 00108 . 00108 [101] - busy (100)
+        00471950: 00108 . 03d20 [101] - busy (3d1f)
+        00475670: 03d20 . 378b0 [101] - busy (378a8) Internal 
+        004acf20: 378b0 . 00108 [100]                             // Freed
+        004ad028: 00108 . 02000 [101] - busy (1ff8) Internal 
+        004af028: 02000 . 00400 [101] - busy (3f8) Internal 
+        004af428: 00400 . 00bb8 [100]
+        004affe0: 00bb8 . 00020 [111] - busy (1d)
+        004b0000:      00000000      - uncommitted bytes.
+    Heap entries for Segment01 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00300000: 00000 . 00040 [101] - busy (3f)
+        00300040: 00040 . 02000 [101] - busy (1ff8) Internal 
+        00302040: 02000 . 02000 [101] - busy (1ff8) Internal 
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> dt _HEAP_USERDATA_HEADER 0x00302048 
+ntdll!_HEAP_USERDATA_HEADER
+   +0x000 SFreeListEntry   : _SINGLE_LIST_ENTRY
+   +0x000 SubSegment       : 0x004af080 _HEAP_SUBSEGMENT
+   +0x004 Reserved         : 0x004af430 Void
+   +0x008 SizeIndex        : 0xd
+   +0x00c Signature        : 0xf0e0d0c0
+
+0:001> dt _INTERLOCK_SEQ (0x004af080 + 8)
+ntdll!_INTERLOCK_SEQ
+   +0x000 Depth            : 8
+   +0x002 FreeEntryOffset  : 0x2d8
+   +0x000 OffsetAndDepth   : 0x2d80008
+   +0x004 Sequence         : 1
+   +0x000 Exchg            : 0n4342677512
+
+0:001> dd 0x00302048 
+          ----------
+          UserBlocks
+00302048  004af080 004af430 0000000d f0e0d0c0
+00302058  3c132fed 88000000 00000023 00000000
+00302068  00000000 00000000 00000000 00000000
+00302078  00000000 00000000 00000000 00000000
+00302088  00000000 00000000 00000000 00000000
+00302098  00000000 00000000 00000000 00000000
+003020a8  00000000 00000000 00000000 00000000
+003020b8  00000000 00000000 00000000 00000000
+
+0:001> ?00302048  + (2d8 * 8)
+        --------     ----
+        UserBlocks  FreeEntryOffset
+Evaluate expression: 3159816 = 00303708
+
+0:001> !heap -i 00303708
+SEGMENT HEAP ERROR: failed to initialize the extention
+Detailed information for block entry 00303708
+Assumed heap       : 0x00470000 (Use !heap -i NewHeapHandle to change)
+Header content     : 0x3C132D07 0x80000000
+Block flags        : 0x0 LFH (free )
+Total block size   : 0x21 units (0x108 bytes)
+Subsegment         : 0x004af080
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x303710         // Not allocated into 0x4acf28
+---------------------------------------------
+
+(1bc.11a4): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=008afbfc ebp=008afc28 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -hl 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00040000 bytes committed)
+    Segment at 00300000 to 00400000 (00005000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00200000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000038c
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00470138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004700a0
+    Uncommitted ranges:   00470090
+    FreeList[ 00 ] at 004700c4: 00304048 . 004acf28   (3 blocks)
+
+...
+        LFH data region at 00302048 (subsegment 004af080):
+            00302058: 00108 - busy (100)
+            00302160: 00108 - busy (100)
+            00302268: 00108 - busy (100)
+            00302370: 00108 - busy (100)
+            00302478: 00108 - busy (100)
+            00302580: 00108 - busy (100)
+            00302688: 00108 - busy (100)
+            00302790: 00108 - busy (100)
+            00302898: 00108 - busy (100)
+            003029a0: 00108 - busy (100)
+            00302aa8: 00108 - busy (100)
+            00302bb0: 00108 - busy (100)
+            00302cb8: 00108 - busy (100)
+            00302dc0: 00108 - busy (100)
+            00302ec8: 00108 - busy (100)
+            00302fd0: 00108 - busy (100)
+            003030d8: 00108 - busy (100)
+            003031e0: 00108 - busy (100)
+            003032e8: 00108 - busy (100)
+            003033f0: 00108 - busy (100)
+            003034f8: 00108 - busy (100)
+            00303600: 00108 - busy (100)
+            00303708: 00108 - busy (100)   // Allocated here!
+            00303810: 00108 - free
+            00303918: 00108 - free
+            00303a20: 00108 - free
+            00303b28: 00108 - free
+            00303c30: 00108 - free
+            00303d38: 00108 - free
+            00303e40: 00108 - free
+
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+18th chunk(0x4ad048) was deallocated       
+---------------------------------------------
+
+(1bc.11ac): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=0080fb08 ebp=0080fb34 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -hl 470000
+...
+        004ad028: 00108 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 004ad030 (subsegment 004af040):
+            004ad040: 00108 - free           // Freed!
+            004ad148: 00108 - busy (100)
+            004ad250: 00108 - busy (100)
+            004ad358: 00108 - busy (100)
+            004ad460: 00108 - busy (100)
+            004ad568: 00108 - busy (100)
+            004ad670: 00108 - busy (100)
+            004ad778: 00108 - busy (100)
+            004ad880: 00108 - busy (100)
+            004ad988: 00108 - busy (100)
+            004ada90: 00108 - busy (100)
+            004adb98: 00108 - busy (100)
+            004adca0: 00108 - busy (100)
+            004adda8: 00108 - busy (100)
+            004adeb0: 00108 - busy (100)
+            004adfb8: 00108 - busy (100)
+            004ae0c0: 00108 - busy (100)
+            004ae1c8: 00108 - busy (100)
+            004ae2d0: 00108 - busy (100)
+            004ae3d8: 00108 - busy (100)
+            004ae4e0: 00108 - busy (100)
+            004ae5e8: 00108 - busy (100)
+            004ae6f0: 00108 - busy (100)
+            004ae7f8: 00108 - busy (100)
+            004ae900: 00108 - busy (100)
+            004aea08: 00108 - busy (100)
+            004aeb10: 00108 - busy (100)
+            004aec18: 00108 - busy (100)
+            004aed20: 00108 - busy (100)
+            004aee28: 00108 - busy (100)
+
+ ...
+        LFH data region at 00302048 (subsegment 004af080):
+            00302058: 00108 - busy (100)
+            00302160: 00108 - busy (100)
+            00302268: 00108 - busy (100)
+            00302370: 00108 - busy (100)
+            00302478: 00108 - busy (100)
+            00302580: 00108 - busy (100)
+            00302688: 00108 - busy (100)
+            00302790: 00108 - busy (100)
+            00302898: 00108 - busy (100)
+            003029a0: 00108 - busy (100)
+            00302aa8: 00108 - busy (100)
+            00302bb0: 00108 - busy (100)
+            00302cb8: 00108 - busy (100)
+            00302dc0: 00108 - busy (100)
+            00302ec8: 00108 - busy (100)
+            00302fd0: 00108 - busy (100)
+            003030d8: 00108 - busy (100)
+            003031e0: 00108 - busy (100)
+            003032e8: 00108 - busy (100)
+            003033f0: 00108 - busy (100)
+            003034f8: 00108 - busy (100)
+            00303600: 00108 - busy (100)
+            00303708: 00108 - busy (100)
+            00303810: 00108 - free
+            00303918: 00108 - free
+            00303a20: 00108 - free
+            00303b28: 00108 - free
+            00303c30: 00108 - free
+            00303d38: 00108 - free
+            00303e40: 00108 - free
+
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x4ad048   // Last free first use 
+---------------------------------------------
+
+(1bc.11f0): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=0092fee4 ebp=0092ff10 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -hl 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00040000 bytes committed)
+    Segment at 00300000 to 00400000 (00005000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00200000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000038c
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00470138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004700a0
+    Uncommitted ranges:   00470090
+    FreeList[ 00 ] at 004700c4: 00304048 . 004acf28   (3 blocks)
+
+...
+
+        LFH data region at 004ad030 (subsegment 004af040):
+            004ad040: 00108 - busy (100)  // Allocated again!!
+            004ad148: 00108 - busy (100)
+            004ad250: 00108 - busy (100)
+            004ad358: 00108 - busy (100)
+            004ad460: 00108 - busy (100)
+            004ad568: 00108 - busy (100)
+            004ad670: 00108 - busy (100)
+            004ad778: 00108 - busy (100)
+            004ad880: 00108 - busy (100)
+            004ad988: 00108 - busy (100)
+            004ada90: 00108 - busy (100)
+            004adb98: 00108 - busy (100)
+            004adca0: 00108 - busy (100)
+            004adda8: 00108 - busy (100)
+            004adeb0: 00108 - busy (100)
+            004adfb8: 00108 - busy (100)
+            004ae0c0: 00108 - busy (100)
+            004ae1c8: 00108 - busy (100)
+            004ae2d0: 00108 - busy (100)
+            004ae3d8: 00108 - busy (100)
+            004ae4e0: 00108 - busy (100)
+            004ae5e8: 00108 - busy (100)
+            004ae6f0: 00108 - busy (100)
+            004ae7f8: 00108 - busy (100)
+            004ae900: 00108 - busy (100)
+            004aea08: 00108 - busy (100)
+            004aeb10: 00108 - busy (100)
+            004aec18: 00108 - busy (100)
+            004aed20: 00108 - busy (100)
+            004aee28: 00108 - busy (100)
+...
+
+        LFH data region at 00302048 (subsegment 004af080):
+            00302058: 00108 - busy (100)
+            00302160: 00108 - busy (100)
+            00302268: 00108 - busy (100)
+            00302370: 00108 - busy (100)
+            00302478: 00108 - busy (100)
+            00302580: 00108 - busy (100)
+            00302688: 00108 - busy (100)
+            00302790: 00108 - busy (100)
+            00302898: 00108 - busy (100)
+            003029a0: 00108 - busy (100)
+            00302aa8: 00108 - busy (100)
+            00302bb0: 00108 - busy (100)
+            00302cb8: 00108 - busy (100)
+            00302dc0: 00108 - busy (100)
+            00302ec8: 00108 - busy (100)
+            00302fd0: 00108 - busy (100)
+            003030d8: 00108 - busy (100)
+            003031e0: 00108 - busy (100)
+            003032e8: 00108 - busy (100)
+            003033f0: 00108 - busy (100)
+            003034f8: 00108 - busy (100)
+            00303600: 00108 - busy (100)
+            00303708: 00108 - busy (100)
+            00303810: 00108 - free
+            00303918: 00108 - free
+            00303a20: 00108 - free
+            00303b28: 00108 - free
+            00303c30: 00108 - free
+            00303d38: 00108 - free
+            00303e40: 00108 - free
+
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> dt _HEAP_LOCAL_SEGMENT_INFO (((poi(470000 + d4) + 310) + 18) + 68 * 0n32)
+ntdll!_HEAP_LOCAL_SEGMENT_INFO
+   +0x000 Hint             : 0x004af040 _HEAP_SUBSEGMENT
+   +0x004 ActiveSubsegment : 0x004af080 _HEAP_SUBSEGMENT
+   +0x008 CachedItems      : [16] 0x004af040 _HEAP_SUBSEGMENT
+   +0x048 SListHeader      : _SLIST_HEADER
+   +0x050 Counters         : _HEAP_BUCKET_COUNTERS
+   +0x058 LocalData        : 0x00475988 _HEAP_LOCAL_DATA
+   +0x05c LastOpSequence   : 3
+   +0x060 BucketIndex      : 0x20
+   +0x062 LastUsed         : 0
+   
+0:001> dt _HEAP_SUBSEGMENT 0x004af040 
+ntdll!_HEAP_SUBSEGMENT
+   +0x000 LocalInfo        : 0x004766a0 _HEAP_LOCAL_SEGMENT_INFO
+   +0x004 UserBlocks       : 0x004ad030 _HEAP_USERDATA_HEADER
+   +0x008 AggregateExchg   : _INTERLOCK_SEQ
+   +0x010 BlockSize        : 0x21
+   +0x012 Flags            : 0
+   +0x014 BlockCount       : 0x1e
+   +0x016 SizeIndex        : 0x20 ' '
+   +0x017 AffinityIndex    : 0 ''
+   +0x010 Alignment        : [2] 0x21
+   +0x018 SFreeListEntry   : _SINGLE_LIST_ENTRY
+   +0x01c Lock             : 3
+
+0:001> dt _INTERLOCK_SEQ (0x004af040 + 8)
+ntdll!_INTERLOCK_SEQ
+   +0x000 Depth            : 0
+   +0x002 FreeEntryOffset  : 0xffff
+   +0x000 OffsetAndDepth   : 0xffff0000
+   +0x004 Sequence         : 2
+   +0x000 Exchg            : 0n12884836352
+
+0:001> dp (((poi(470000 + d4) + 310) + 18) + 68 * 0n32) + 8
+004766a8  004af040 00000000 00000000 00000000
+004766b8  00000000 00000000 00000000 00000000
+004766c8  00000000 00000000 00000000 00000000
+004766d8  00000000 00000000 00000000 00000000
+004766e8  00000000 00070000 0000005a 00000003
+004766f8  00475988 00000003 00000020 00000000
+00476708  00000000 00000000 00000000 00000000
+00476718  00000000 00000000 00000000 00000000
+
+0:001> dx -r1 ((ntdll!_HEAP_SUBSEGMENT * (*)[16])0x4766a8)
+((ntdll!_HEAP_SUBSEGMENT * (*)[16])0x4766a8)                 : 0x4766a8 [Type: _HEAP_SUBSEGMENT * (*)[16]]
+    [0]              : 0x4af040 [Type: _HEAP_SUBSEGMENT *]
+    [1]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [2]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [3]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [4]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [5]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [6]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [7]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [8]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [9]              : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [10]             : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [11]             : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [12]             : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [13]             : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [14]             : 0x0 [Type: _HEAP_SUBSEGMENT *]
+    [15]             : 0x0 [Type: _HEAP_SUBSEGMENT *]
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+18th chunk(0x4ad048) was deallocated
+48th chunk(0x300060) was deallocated
+78th chunk(0x302060) was deallocated
+---------------------------------------------
+
+(1bc.155c): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=007efc54 ebp=007efc80 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -hl 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+...
+        LFH data region at 004ad030 (subsegment 004af040):
+            004ad040: 00108 - free
+            004ad148: 00108 - busy (100)
+            004ad250: 00108 - busy (100)
+            004ad358: 00108 - busy (100)
+            004ad460: 00108 - busy (100)
+            004ad568: 00108 - busy (100)
+            004ad670: 00108 - busy (100)
+...
+        LFH data region at 00300048 (subsegment 004af060):
+            00300058: 00108 - free
+            00300160: 00108 - busy (100)
+            00300268: 00108 - busy (100)
+            00300370: 00108 - busy (100)
+            00300478: 00108 - busy (100)
+            00300580: 00108 - busy (100)
+            00300688: 00108 - busy (100)
+ ...
+
+        00302040: 02000 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 00302048 (subsegment 004af080):
+            00302058: 00108 - free
+            00302160: 00108 - busy (100)
+            00302268: 00108 - busy (100)
+            00302370: 00108 - busy (100)
+            00302478: 00108 - busy (100)
+            00302580: 00108 - busy (100)
+            00302688: 00108 - busy (100)
+            00302790: 00108 - busy (100)
+            00302898: 00108 - busy (100)
+            003029a0: 00108 - busy (100)
+            00302aa8: 00108 - busy (100)
+            00302bb0: 00108 - busy (100)
+            00302cb8: 00108 - busy (100)
+            00302dc0: 00108 - busy (100)
+            00302ec8: 00108 - busy (100)
+            00302fd0: 00108 - busy (100)
+            003030d8: 00108 - busy (100)
+            003031e0: 00108 - busy (100)
+            003032e8: 00108 - busy (100)
+            003033f0: 00108 - busy (100)
+            003034f8: 00108 - busy (100)
+            00303600: 00108 - busy (100)
+            00303708: 00108 - busy (100)
+            00303810: 00108 - free
+            00303918: 00108 - free
+            00303a20: 00108 - free
+            00303b28: 00108 - free
+            00303c30: 00108 - free
+            00303d38: 00108 - free
+            00303e40: 00108 - free
+
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+
+0:001> dt _HEAP_LOCAL_SEGMENT_INFO (((poi(470000 + d4) + 310) + 18) + 68 * 0n32)
+ntdll!_HEAP_LOCAL_SEGMENT_INFO
+   +0x000 Hint             : 0x004af080 _HEAP_SUBSEGMENT
+   +0x004 ActiveSubsegment : 0x004af080 _HEAP_SUBSEGMENT
+   +0x008 CachedItems      : [16] 0x004af040 _HEAP_SUBSEGMENT
+   +0x048 SListHeader      : _SLIST_HEADER
+   +0x050 Counters         : _HEAP_BUCKET_COUNTERS
+   +0x058 LocalData        : 0x00475988 _HEAP_LOCAL_DATA
+   +0x05c LastOpSequence   : 3
+   +0x060 BucketIndex      : 0x20
+   +0x062 LastUsed         : 0
+
+0:001> dp (((poi(470000 + d4) + 310) + 18) + 68 * 0n32) + 8
+004766a8  004af040 004af060 00000000 00000000
+004766b8  00000000 00000000 00000000 00000000
+004766c8  00000000 00000000 00000000 00000000
+004766d8  00000000 00000000 00000000 00000000
+004766e8  00000000 00070000 0000005a 00000003
+004766f8  00475988 00000003 00000020 00000000
+00476708  00000000 00000000 00000000 00000000
+00476718  00000000 00000000 00000000 00000000
+
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x302060
+
+A heap chunk was allocated : 0x303818
+
+A heap chunk was allocated : 0x303920
+
+A heap chunk was allocated : 0x303a28
+
+A heap chunk was allocated : 0x303b30
+
+A heap chunk was allocated : 0x303c38
+
+A heap chunk was allocated : 0x303d40
+
+A heap chunk was allocated : 0x303e48
+
+A heap chunk was allocated : 0x4ad048
+---------------------------------------------
+
+(1bc.bcc): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=007dfb28 ebp=007dfb54 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> dt _HEAP_LOCAL_SEGMENT_INFO (((poi(470000 + d4) + 310) + 18) + 68 * 0n32)
+ntdll!_HEAP_LOCAL_SEGMENT_INFO
+   +0x000 Hint             : (null) 
+   +0x004 ActiveSubsegment : 0x004af040 _HEAP_SUBSEGMENT
+   +0x008 CachedItems      : [16] (null) 
+   +0x048 SListHeader      : _SLIST_HEADER
+   +0x050 Counters         : _HEAP_BUCKET_COUNTERS
+   +0x058 LocalData        : 0x00475988 _HEAP_LOCAL_DATA
+   +0x05c LastOpSequence   : 3
+   +0x060 BucketIndex      : 0x20
+   +0x062 LastUsed         : 0
+
+0:001> dp (((poi(470000 + d4) + 310) + 18) + 68 * 0n32) + 8
+004766a8  00000000 004af060 00000000 00000000
+004766b8  00000000 00000000 00000000 00000000
+004766c8  00000000 00000000 00000000 00000000
+004766d8  00000000 00000000 00000000 00000000
+004766e8  00000000 00070000 0000005a 00000003
+004766f8  00475988 00000003 00000020 00000000
+00476708  00000000 00000000 00000000 00000000
+00476718  00000000 00000000 00000000 00000000
+0:001> g
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x300060
+---------------------------------------------
+
+(1bc.28c): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=008cfc2c ebp=008cfc58 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> dp (((poi(470000 + d4) + 310) + 18) + 68 * 0n32) + 8
+004766a8  00000000 00000000 00000000 00000000
+004766b8  00000000 00000000 00000000 00000000
+004766c8  00000000 00000000 00000000 00000000
+004766d8  00000000 00000000 00000000 00000000
+004766e8  00000000 00070000 0000005a 00000003
+004766f8  00475988 00000003 00010020 00000000
+00476708  00000000 00000000 00000000 00000000
+00476718  00000000 00000000 00000000 00000000
+
+0:001> !heap -hl 470000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00470000 
+    Segment at 00470000 to 004b0000 (00040000 bytes committed)
+    Segment at 00300000 to 00400000 (00005000 bytes committed)
+    Flags:                00001002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00200000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000038c
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00470138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004700a0
+    Uncommitted ranges:   00470090
+    FreeList[ 00 ] at 004700c4: 00304048 . 004acf28   (3 blocks)
+
+    Heap entries for Segment00 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00470000: 00000 . 00588 [101] - busy (587)
+        00470588: 00588 . 00240 [101] - busy (23f)
+        004707c8: 00240 . 00108 [101] - busy (100)
+        004708d0: 00108 . 00108 [101] - busy (100)
+        004709d8: 00108 . 00108 [101] - busy (100)
+        00470ae0: 00108 . 00108 [101] - busy (100)
+        00470be8: 00108 . 00108 [101] - busy (100)
+        00470cf0: 00108 . 00108 [101] - busy (100)
+        00470df8: 00108 . 00108 [101] - busy (100)
+        00470f00: 00108 . 00108 [101] - busy (100)
+        00471008: 00108 . 00108 [101] - busy (100)
+        00471110: 00108 . 00108 [101] - busy (100)
+        00471218: 00108 . 00108 [101] - busy (100)
+        00471320: 00108 . 00108 [101] - busy (100)
+        00471428: 00108 . 00108 [101] - busy (100)
+        00471530: 00108 . 00108 [101] - busy (100)
+        00471638: 00108 . 00108 [101] - busy (100)
+        00471740: 00108 . 00108 [101] - busy (100)
+        00471848: 00108 . 00108 [101] - busy (100)
+        00471950: 00108 . 03d20 [101] - busy (3d1f)
+        00475670: 03d20 . 378b0 [101] - busy (378a8) Internal 
+        004acf20: 378b0 . 00108 [100]
+        004ad028: 00108 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 004ad030 (subsegment 004af040):
+            004ad040: 00108 - busy (100)
+            004ad148: 00108 - busy (100)
+            004ad250: 00108 - busy (100)
+            004ad358: 00108 - busy (100)
+            004ad460: 00108 - busy (100)
+            004ad568: 00108 - busy (100)
+            004ad670: 00108 - busy (100)
+            004ad778: 00108 - busy (100)
+            004ad880: 00108 - busy (100)
+            004ad988: 00108 - busy (100)
+            004ada90: 00108 - busy (100)
+            004adb98: 00108 - busy (100)
+            004adca0: 00108 - busy (100)
+            004adda8: 00108 - busy (100)
+            004adeb0: 00108 - busy (100)
+            004adfb8: 00108 - busy (100)
+            004ae0c0: 00108 - busy (100)
+            004ae1c8: 00108 - busy (100)
+            004ae2d0: 00108 - busy (100)
+            004ae3d8: 00108 - busy (100)
+            004ae4e0: 00108 - busy (100)
+            004ae5e8: 00108 - busy (100)
+            004ae6f0: 00108 - busy (100)
+            004ae7f8: 00108 - busy (100)
+            004ae900: 00108 - busy (100)
+            004aea08: 00108 - busy (100)
+            004aeb10: 00108 - busy (100)
+            004aec18: 00108 - busy (100)
+            004aed20: 00108 - busy (100)
+            004aee28: 00108 - busy (100)
+
+        004af028: 02000 . 00400 [101] - busy (3f8) Internal 
+        004af428: 00400 . 00bb8 [100]
+        004affe0: 00bb8 . 00020 [111] - busy (1d)
+        004b0000:      00000000      - uncommitted bytes.
+    Heap entries for Segment01 in Heap 00470000
+         address: psize . size  flags   state (requested size)
+        00300000: 00000 . 00040 [101] - busy (3f)
+        00300040: 00040 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 00300048 (subsegment 004af060):
+            00300058: 00108 - busy (100)
+            00300160: 00108 - busy (100)
+            00300268: 00108 - busy (100)
+            00300370: 00108 - busy (100)
+            00300478: 00108 - busy (100)
+            00300580: 00108 - busy (100)
+            00300688: 00108 - busy (100)
+            00300790: 00108 - busy (100)
+            00300898: 00108 - busy (100)
+            003009a0: 00108 - busy (100)
+            00300aa8: 00108 - busy (100)
+            00300bb0: 00108 - busy (100)
+            00300cb8: 00108 - busy (100)
+            00300dc0: 00108 - busy (100)
+            00300ec8: 00108 - busy (100)
+            00300fd0: 00108 - busy (100)
+            003010d8: 00108 - busy (100)
+            003011e0: 00108 - busy (100)
+            003012e8: 00108 - busy (100)
+            003013f0: 00108 - busy (100)
+            003014f8: 00108 - busy (100)
+            00301600: 00108 - busy (100)
+            00301708: 00108 - busy (100)
+            00301810: 00108 - busy (100)
+            00301918: 00108 - busy (100)
+            00301a20: 00108 - busy (100)
+            00301b28: 00108 - busy (100)
+            00301c30: 00108 - busy (100)
+            00301d38: 00108 - busy (100)
+            00301e40: 00108 - busy (100)
+
+        00302040: 02000 . 02000 [101] - busy (1ff8) Internal 
+
+        LFH data region at 00302048 (subsegment 004af080):
+            00302058: 00108 - busy (100)
+            00302160: 00108 - busy (100)
+            00302268: 00108 - busy (100)
+            00302370: 00108 - busy (100)
+            00302478: 00108 - busy (100)
+            00302580: 00108 - busy (100)
+            00302688: 00108 - busy (100)
+            00302790: 00108 - busy (100)
+            00302898: 00108 - busy (100)
+            003029a0: 00108 - busy (100)
+            00302aa8: 00108 - busy (100)
+            00302bb0: 00108 - busy (100)
+            00302cb8: 00108 - busy (100)
+            00302dc0: 00108 - busy (100)
+            00302ec8: 00108 - busy (100)
+            00302fd0: 00108 - busy (100)
+            003030d8: 00108 - busy (100)
+            003031e0: 00108 - busy (100)
+            003032e8: 00108 - busy (100)
+            003033f0: 00108 - busy (100)
+            003034f8: 00108 - busy (100)
+            00303600: 00108 - busy (100)
+            00303708: 00108 - busy (100)
+            00303810: 00108 - busy (100)
+            00303918: 00108 - busy (100)
+            00303a20: 00108 - busy (100)
+            00303b28: 00108 - busy (100)
+            00303c30: 00108 - busy (100)
+            00303d38: 00108 - busy (100)
+            00303e40: 00108 - busy (100)
+
+        00304040: 02000 . 00fa0 [100]
+        00304fe0: 00fa0 . 00020 [111] - busy (1d)
+        00305000:      000fb000      - uncommitted bytes.
+0:001> g
+eax=00000172 ebx=00000000 ecx=003050d8 edx=0028f7c0 esi=77928380 edi=77928340
+eip=77896bb4 esp=0028f7b8 ebp=0028f7d4 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!KiFastSystemCallRet:
+77896bb4 c3              ret
+
+---------- lec04_growable_heap.exe ----------
+A heap chunk was allocated : 0x304060
+
+A heap chunk was allocated : 0x304168
+
+A heap chunk was allocated : 0x304270
+
+A heap chunk was allocated : 0x304378
+
+A heap chunk was allocated : 0x304480
+---------------------------------------------
+
+All done!

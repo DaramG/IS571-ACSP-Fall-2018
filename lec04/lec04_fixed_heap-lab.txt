@@ -1,0 +1,592 @@
+
+1. Windbg commands to display memory
+  - !address
+  - !address /f:heap
+  - !heap
+
+2. Understanding commands and structures about heap memory
+  - !heap options
+  - dt ntdll!_HEAP XXXX
+  - _HEAP_ENTRY list
+
+  - Encoded Heap Header
+  - How to decode
+  - Check heap elements manually
+
+  - using !heap command 
+    !heap
+    !heap -s
+    !heap -i xxxx
+    !heap -hl XXXX
+
+3. Size-fixed Heap Analysis
+
+*** wait with pending attach
+
+************* Symbol Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+Symbol search path is: SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+Executable search path is: 
+ModLoad: 000d0000 000d6000   C:\Users\IEUser\Desktop\lec04\lec04_fixed_heap.exe
+ModLoad: 77850000 77992000   C:\Windows\SYSTEM32\ntdll.dll
+ModLoad: 75f50000 76025000   C:\Windows\system32\kernel32.dll
+ModLoad: 75890000 758db000   C:\Windows\system32\KERNELBASE.dll
+ModLoad: 6cb90000 6cc01000   C:\Windows\system32\MSVCP120.dll
+ModLoad: 6eed0000 6efbe000   C:\Windows\system32\MSVCR120.dll
+(1350.4f4): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=015ef9c8 ebp=015ef9f4 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  1:   00170000                
+  2:   00010000                
+  3:   00020000                
+  4:   00490000               
+
+0:001> !heap -h
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  1:   00170000 
+    Segment at 00170000 to 00270000 (00045000 bytes committed)
+  2:   00010000 
+    Segment at 00010000 to 00020000 (00001000 bytes committed)
+  3:   00020000 
+    Segment at 00020000 to 00030000 (00010000 bytes committed)
+  4:   00490000 
+    Segment at 00490000 to 01490000 (00001000 bytes committed)
+
+0:001> !heap -s
+SEGMENT HEAP ERROR: failed to initialize the extention
+LFH Key                   : 0x70d2e927
+Termination on corruption : ENABLED
+  Heap     Flags   Reserv  Commit  Virt   Free  List   UCR  Virt  Lock  Fast 
+                    (k)     (k)    (k)     (k) length      blocks cont. heap 
+-----------------------------------------------------------------------------
+00170000 00000002    1024    276   1024      2     6     1    0      0   LFH
+00010000 00008000      64      4     64      2     1     1    0      0      
+00020000 00008000      64     64     64     54     1     1    0      0      
+00490000 00001000   16384      4  16384      2     1     1    0      0      
+-----------------------------------------------------------------------------
+
+0:001> dt _HEAP 490000
+ntdll!_HEAP
+   +0x000 Entry            : _HEAP_ENTRY
+   +0x008 SegmentSignature : 0xffeeffee
+   +0x00c SegmentFlags     : 0
+   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x4900a8 - 0x4900a8 ]
+   +0x018 Heap             : 0x00490000 _HEAP
+   +0x01c BaseAddress      : 0x00490000 Void
+   +0x020 NumberOfPages    : 0x1000
+   +0x024 FirstEntry       : 0x00490588 _HEAP_ENTRY
+   +0x028 LastValidEntry   : 0x01490000 _HEAP_ENTRY
+   +0x02c NumberOfUnCommittedPages : 0xfff
+   +0x030 NumberOfUnCommittedRanges : 1
+   +0x034 SegmentAllocatorBackTraceIndex : 0
+   +0x036 Reserved         : 0
+   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x490ff0 - 0x490ff0 ]
+   +0x040 Flags            : 0x1000
+   +0x044 ForceFlags       : 0
+   +0x048 CompatibilityFlags : 0
+   +0x04c EncodeFlagMask   : 0x100000
+   +0x050 Encoding         : _HEAP_ENTRY
+   +0x058 PointerKey       : 0x22b7f5a5
+   +0x05c Interceptor      : 0
+   +0x060 VirtualMemoryThreshold : 0xfe00
+   +0x064 Signature        : 0xeeffeeff
+   +0x068 SegmentReserve   : 0x100000
+   +0x06c SegmentCommit    : 0x2000
+   +0x070 DeCommitFreeBlockThreshold : 0x200
+   +0x074 DeCommitTotalFreeThreshold : 0x2000
+   +0x078 TotalFreeSize    : 0x14b
+   +0x07c MaximumAllocationSize : 0x7ffdefff
+   +0x080 ProcessHeapsListIndex : 4
+   +0x082 HeaderValidateLength : 0x138
+   +0x084 HeaderValidateCopy : (null) 
+   +0x088 NextAvailableTagIndex : 0
+   +0x08a MaximumTagIndex  : 0
+   +0x08c TagEntries       : (null) 
+   +0x090 UCRList          : _LIST_ENTRY [ 0x490fe8 - 0x490fe8 ]
+   +0x098 AlignRound       : 0xf
+   +0x09c AlignMask        : 0xfffffff8
+   +0x0a0 VirtualAllocdBlocks : _LIST_ENTRY [ 0x4900a0 - 0x4900a0 ]
+   +0x0a8 SegmentList      : _LIST_ENTRY [ 0x490010 - 0x490010 ]
+   +0x0b0 AllocatorBackTraceIndex : 0
+   +0x0b4 NonDedicatedListLength : 0
+   +0x0b8 BlocksIndex      : 0x00490150 Void
+   +0x0bc UCRIndex         : (null) 
+   +0x0c0 PseudoTagEntries : (null) 
+   +0x0c4 FreeLists        : _LIST_ENTRY [ 0x490590 - 0x490590 ]
+   +0x0cc LockVariable     : 0x00490138 _HEAP_LOCK
+   +0x0d0 CommitRoutine    : 0x22b7f5a5     long  +22b7f5a5
+   +0x0d4 FrontEndHeap     : (null) 
+   +0x0d8 FrontHeapLockCount : 0
+   +0x0da FrontEndHeapType : 0 ''
+   +0x0dc Counters         : _HEAP_COUNTERS
+   +0x130 TuningParameters : _HEAP_TUNING_PARAMETERS
+
+0:001> !heap -h 490000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00490000 
+    Segment at 00490000 to 01490000 (00001000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      0000014b
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00490138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004900a0
+    Uncommitted ranges:   00490090
+    FreeList[ 00 ] at 004900c4: 00490590 . 00490590   (1 block )
+
+    Heap entries for Segment00 in Heap 00490000
+         address: psize . size  flags   state (requested size)
+        00490000: 00000 . 00588 [101] - busy (587)
+        00490588: 00588 . 00a58 [100]
+        00490fe0: 00a58 . 00020 [111] - busy (1d)
+        00491000:      00fff000      - uncommitted bytes.
+
+0:001> dd 00490000
+00490000  e092dfd5 01003973 ffeeffee 00000000  // ffeeffee: Signature of Heap Segment
+00490010  004900a8 004900a8 00490000 00490000
+00490020  00001000 00490588 01490000 00000fff
+00490030  00000001 00000000 00490ff0 00490ff0
+00490040  00001000 00000000 00000000 00100000
+00490050  5093df64 00003973 22b7f5a5 00000000
+00490060  0000fe00 eeffeeff 00100000 00002000
+00490070  00000200 00002000 0000014b 7ffdefff
+
+0:001> g
+(1350.14e4): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=016af928 ebp=016af954 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -h 490000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00490000 
+    Segment at 00490000 to 01490000 (0000b000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      00000141
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00490138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004900a0
+    Uncommitted ranges:   00490090
+    FreeList[ 00 ] at 004900c4: 0049a5e0 . 0049a5e0   (1 block )
+
+    Heap entries for Segment00 in Heap 00490000
+         address: psize . size  flags   state (requested size)
+        00490000: 00000 . 00588 [101] - busy (587)
+        00490588: 00588 . 01008 [101] - busy (1000)
+        00491590: 01008 . 01008 [101] - busy (1000) // dump 
+        00492598: 01008 . 01008 [101] - busy (1000)
+        004935a0: 01008 . 01008 [101] - busy (1000)
+        004945a8: 01008 . 01008 [101] - busy (1000)
+        004955b0: 01008 . 01008 [101] - busy (1000)
+        004965b8: 01008 . 01008 [101] - busy (1000)
+        004975c0: 01008 . 01008 [101] - busy (1000)
+        004985c8: 01008 . 01008 [101] - busy (1000)
+        004995d0: 01008 . 01008 [101] - busy (1000)
+        0049a5d8: 01008 . 00a08 [100]
+        0049afe0: 00a08 . 00020 [111] - busy (1d)
+        0049b000:      00ff5000      - uncommitted bytes.
+
+0:001> dd 00491590
+00491590  5292dd65 08003b72 004900c4 004900c4
+004915a0  00000000 00000000 00000000 00000000
+004915b0  00000000 00000000 00000000 00000000
+004915c0  00000000 00000000 00000000 00000000
+004915d0  00000000 00000000 00000000 00000000
+004915e0  00000000 00000000 00000000 00000000
+004915f0  00000000 00000000 00000000 00000000
+00491600  00000000 00000000 00000000 00000000
+
+0:001> dt _HEAP_ENTRY 00491590  // Encoded
+ntdll!_HEAP_ENTRY
+   +0x000 Size             : 0xdd65
+   +0x002 Flags            : 0x92 ''
+   +0x003 SmallTagIndex    : 0x52 'R'
+   +0x000 SubSegmentCode   : 0x5292dd65 Void
+   +0x004 PreviousSize     : 0x3b72
+   +0x006 SegmentOffset    : 0 ''
+   +0x006 LFHFlags         : 0 ''
+   +0x007 UnusedBytes      : 0x8 ''
+   +0x000 FunctionIndex    : 0xdd65
+   +0x002 ContextValue     : 0x5292
+   +0x000 InterceptorValue : 0x5292dd65
+   +0x004 UnusedBytesLength : 0x3b72
+   +0x006 EntryOffset      : 0 ''
+   +0x007 ExtendedBlockSignature : 0x8 ''
+   +0x000 Code1            : 0x5292dd65
+   +0x004 Code2            : 0x3b72
+   +0x006 Code3            : 0 ''
+   +0x007 Code4            : 0x8 ''
+   +0x000 AgregateCode     : 0x08003b72`5292dd65
+
+0:001> dt _HEAP 490000
+ntdll!_HEAP
+   +0x000 Entry            : _HEAP_ENTRY
+   +0x008 SegmentSignature : 0xffeeffee
+   +0x00c SegmentFlags     : 0
+   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x4900a8 - 0x4900a8 ]
+   +0x018 Heap             : 0x00490000 _HEAP
+   +0x01c BaseAddress      : 0x00490000 Void
+   +0x020 NumberOfPages    : 0x1000
+   +0x024 FirstEntry       : 0x00490588 _HEAP_ENTRY
+   +0x028 LastValidEntry   : 0x01490000 _HEAP_ENTRY
+   +0x02c NumberOfUnCommittedPages : 0xff5
+   +0x030 NumberOfUnCommittedRanges : 1
+   +0x034 SegmentAllocatorBackTraceIndex : 0
+   +0x036 Reserved         : 0
+   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x49aff0 - 0x49aff0 ]
+   +0x040 Flags            : 0x1000
+   +0x044 ForceFlags       : 0
+   +0x048 CompatibilityFlags : 0
+   +0x04c EncodeFlagMask   : 0x100000
+   +0x050 Encoding         : _HEAP_ENTRY // Encoding Key
+
+0:001> dd 490000 + 50
+00490050  5093df64 00003973 22b7f5a5 00000000
+          -------- 
+          Encoding Key (XOR)
+00490060  0000fe00 eeffeeff 00100000 00002000
+00490070  00000200 00002000 00000141 7ffdefff
+00490080  01380004 00000000 00000000 00000000
+00490090  0049afe8 0049afe8 0000000f fffffff8
+004900a0  004900a0 004900a0 00490010 00490010
+004900b0  00000000 00000000 00490150 00000000
+004900c0  00000000 0049a5e0 0049a5e0 00490138
+
+0:001> ? poi(00490050)^poi(00491590) 
+             --------      --------
+          Encoding Key    Encoded HeapEntry
+Evaluate expression: 33620481 = 02010201  // Decoded HeapEntry
+
+0:001> !heap -i 00491590
+SEGMENT HEAP ERROR: failed to initialize the extention
+Detailed information for block entry 00491590
+Assumed heap       : 0x00490000 (Use !heap -i NewHeapHandle to change)
+Header content     : 0x5292DD65 0x08003B72 (decoded : 0x02010201 0x08000201)
+Owning segment     : 0x00490000 (offset 0)
+Block flags        : 0x1 (busy )
+Total block size   : 0x201 units (0x1008 bytes)
+Requested size     : 0x1000 bytes (unused 0x8 bytes)
+Previous block size: 0x201 units (0x1008 bytes)
+Block CRC          : OK - 0x2  
+Previous block     : 0x00490588
+Next block         : 0x00492598
+
+0:001> g
+(1350.179c): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=015bfb14 ebp=015bfb40 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -h 490000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00490000 
+    Segment at 00490000 to 01490000 (0000b000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      00000342
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00490138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004900a0
+    Uncommitted ranges:   00490090
+    FreeList[ 00 ] at 004900c4: 004985d0 . 0049a5e0   (2 blocks)
+
+    Heap entries for Segment00 in Heap 00490000
+         address: psize . size  flags   state (requested size)
+        00490000: 00000 . 00588 [101] - busy (587)
+        00490588: 00588 . 01008 [101] - busy (1000)
+        00491590: 01008 . 01008 [101] - busy (1000)
+        00492598: 01008 . 01008 [101] - busy (1000)
+        004935a0: 01008 . 01008 [101] - busy (1000)
+        004945a8: 01008 . 01008 [101] - busy (1000)
+        004955b0: 01008 . 01008 [101] - busy (1000)
+        004965b8: 01008 . 01008 [101] - busy (1000)
+        004975c0: 01008 . 01008 [101] - busy (1000)
+        004985c8: 01008 . 01008 [100]                  // Freed
+        004995d0: 01008 . 01008 [101] - busy (1000)
+        0049a5d8: 01008 . 00a08 [100]
+        0049afe0: 00a08 . 00020 [111] - busy (1d)
+        0049b000:      00ff5000      - uncommitted bytes.
+
+0:001> !heap -f -h 490000
+         ----------
+         with FreeList
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00490000 
+    Segment at 00490000 to 01490000 (0000b000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      00000342
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00490138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004900a0
+    Uncommitted ranges:   00490090
+    FreeList[ 00 ] at 004900c4: 004985d0 . 0049a5e0  
+        0049a5d8: 01008 . 00a08 [100] - free
+        004985c8: 01008 . 01008 [100] - free
+
+    Heap entries for Segment00 in Heap 00490000
+         address: psize . size  flags   state (requested size)
+        00490000: 00000 . 00588 [101] - busy (587)
+        00490588: 00588 . 01008 [101] - busy (1000)
+        00491590: 01008 . 01008 [101] - busy (1000)
+        00492598: 01008 . 01008 [101] - busy (1000)
+        004935a0: 01008 . 01008 [101] - busy (1000)
+        004945a8: 01008 . 01008 [101] - busy (1000)
+        004955b0: 01008 . 01008 [101] - busy (1000)
+        004965b8: 01008 . 01008 [101] - busy (1000)
+        004975c0: 01008 . 01008 [101] - busy (1000)
+        004985c8: 01008 . 01008 [100]
+        004995d0: 01008 . 01008 [101] - busy (1000)
+        0049a5d8: 01008 . 00a08 [100]
+        0049afe0: 00a08 . 00020 [111] - busy (1d)
+        0049b000:      00ff5000      - uncommitted bytes.
+
+0:001> g
+(1350.12c0): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=0167fb90 ebp=0167fbbc iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -f -h 490000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00490000 
+    Segment at 00490000 to 01490000 (0000b000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      00000543
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00490138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004900a0
+    Uncommitted ranges:   00490090
+    FreeList[ 00 ] at 004900c4: 004985d0 . 004985d0  
+        004985c8: 01008 . 02a18 [100] - free
+
+    Heap entries for Segment00 in Heap 00490000
+         address: psize . size  flags   state (requested size)
+        00490000: 00000 . 00588 [101] - busy (587)
+        00490588: 00588 . 01008 [101] - busy (1000)
+        00491590: 01008 . 01008 [101] - busy (1000)
+        00492598: 01008 . 01008 [101] - busy (1000)
+        004935a0: 01008 . 01008 [101] - busy (1000)
+        004945a8: 01008 . 01008 [101] - busy (1000)
+        004955b0: 01008 . 01008 [101] - busy (1000)
+        004965b8: 01008 . 01008 [101] - busy (1000)
+        004975c0: 01008 . 01008 [101] - busy (1000)
+        004985c8: 01008 . 02a18 [100]               // Freed and Merged freelist
+        0049afe0: 02a18 . 00020 [111] - busy (1d)
+        0049b000:      00ff5000      - uncommitted bytes.
+
+0:001> g
+(1350.16cc): Break instruction exception - code 80000003 (first chance)
+eax=7ffdd000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+eip=77883bec esp=0172f958 ebp=0172f984 iopl=0         nv up ei pl zr na pe nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+ntdll!DbgBreakPoint:
+77883bec cc              int     3
+
+0:001> !heap -f -h 490000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  4:   00490000 
+    Segment at 00490000 to 01490000 (0006d000 bytes committed)
+    Flags:                00001000
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000200
+    DeCommit Total Thres: 00002000
+    Total Free Size:      000000df
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00490138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   004900a0
+    Uncommitted ranges:   00490090
+    FreeList[ 00 ] at 004900c4: 004fc8f0 . 004fc8f0  
+        004fc8e8: 01008 . 006f8 [100] - free
+
+    Heap entries for Segment00 in Heap 00490000
+         address: psize . size  flags   state (requested size)
+        00490000: 00000 . 00588 [101] - busy (587)
+        00490588: 00588 . 01008 [101] - busy (1000)
+        00491590: 01008 . 01008 [101] - busy (1000)
+        00492598: 01008 . 01008 [101] - busy (1000)
+        004935a0: 01008 . 01008 [101] - busy (1000)
+        004945a8: 01008 . 01008 [101] - busy (1000)
+        004955b0: 01008 . 01008 [101] - busy (1000)
+        004965b8: 01008 . 01008 [101] - busy (1000)
+        004975c0: 01008 . 01008 [101] - busy (1000)
+        004985c8: 01008 . 01008 [101] - busy (1000)
+        004995d0: 01008 . 01008 [101] - busy (1000)
+        0049a5d8: 01008 . 01008 [101] - busy (1000)
+        0049b5e0: 01008 . 01008 [101] - busy (1000)
+        0049c5e8: 01008 . 01008 [101] - busy (1000)
+        0049d5f0: 01008 . 01008 [101] - busy (1000)
+        0049e5f8: 01008 . 01008 [101] - busy (1000)
+        0049f600: 01008 . 01008 [101] - busy (1000)
+        004a0608: 01008 . 01008 [101] - busy (1000)
+        004a1610: 01008 . 01008 [101] - busy (1000)
+        004a2618: 01008 . 01008 [101] - busy (1000)
+        004a3620: 01008 . 01008 [101] - busy (1000)
+        004a4628: 01008 . 01008 [101] - busy (1000)
+        004a5630: 01008 . 01008 [101] - busy (1000)
+        004a6638: 01008 . 01008 [101] - busy (1000)
+        004a7640: 01008 . 01008 [101] - busy (1000)
+        004a8648: 01008 . 01008 [101] - busy (1000)
+        004a9650: 01008 . 01008 [101] - busy (1000)
+        004aa658: 01008 . 01008 [101] - busy (1000)
+        004ab660: 01008 . 01008 [101] - busy (1000)
+        004ac668: 01008 . 01008 [101] - busy (1000)
+        004ad670: 01008 . 01008 [101] - busy (1000)
+        004ae678: 01008 . 01008 [101] - busy (1000)
+        004af680: 01008 . 01008 [101] - busy (1000)
+        004b0688: 01008 . 01008 [101] - busy (1000)
+        004b1690: 01008 . 01008 [101] - busy (1000)
+        004b2698: 01008 . 01008 [101] - busy (1000)
+        004b36a0: 01008 . 01008 [101] - busy (1000)
+        004b46a8: 01008 . 01008 [101] - busy (1000)
+        004b56b0: 01008 . 01008 [101] - busy (1000)
+        004b66b8: 01008 . 01008 [101] - busy (1000)
+        004b76c0: 01008 . 01008 [101] - busy (1000)
+        004b86c8: 01008 . 01008 [101] - busy (1000)
+        004b96d0: 01008 . 01008 [101] - busy (1000)
+        004ba6d8: 01008 . 01008 [101] - busy (1000)
+        004bb6e0: 01008 . 01008 [101] - busy (1000)
+        004bc6e8: 01008 . 01008 [101] - busy (1000)
+        004bd6f0: 01008 . 01008 [101] - busy (1000)
+        004be6f8: 01008 . 01008 [101] - busy (1000)
+        004bf700: 01008 . 01008 [101] - busy (1000)
+        004c0708: 01008 . 01008 [101] - busy (1000)
+        004c1710: 01008 . 01008 [101] - busy (1000)
+        004c2718: 01008 . 01008 [101] - busy (1000)
+        004c3720: 01008 . 01008 [101] - busy (1000)
+        004c4728: 01008 . 01008 [101] - busy (1000)
+        004c5730: 01008 . 01008 [101] - busy (1000)
+        004c6738: 01008 . 01008 [101] - busy (1000)
+        004c7740: 01008 . 01008 [101] - busy (1000)
+        004c8748: 01008 . 01008 [101] - busy (1000)
+        004c9750: 01008 . 01008 [101] - busy (1000)
+        004ca758: 01008 . 01008 [101] - busy (1000)
+        004cb760: 01008 . 01008 [101] - busy (1000)
+        004cc768: 01008 . 01008 [101] - busy (1000)
+        004cd770: 01008 . 01008 [101] - busy (1000)
+        004ce778: 01008 . 01008 [101] - busy (1000)
+        004cf780: 01008 . 01008 [101] - busy (1000)
+        004d0788: 01008 . 01008 [101] - busy (1000)
+        004d1790: 01008 . 01008 [101] - busy (1000)
+        004d2798: 01008 . 01008 [101] - busy (1000)
+        004d37a0: 01008 . 01008 [101] - busy (1000)
+        004d47a8: 01008 . 01008 [101] - busy (1000)
+        004d57b0: 01008 . 01008 [101] - busy (1000)
+        004d67b8: 01008 . 01008 [101] - busy (1000)
+        004d77c0: 01008 . 01008 [101] - busy (1000)
+        004d87c8: 01008 . 01008 [101] - busy (1000)
+        004d97d0: 01008 . 01008 [101] - busy (1000)
+        004da7d8: 01008 . 01008 [101] - busy (1000)
+        004db7e0: 01008 . 01008 [101] - busy (1000)
+        004dc7e8: 01008 . 01008 [101] - busy (1000)
+        004dd7f0: 01008 . 01008 [101] - busy (1000)
+        004de7f8: 01008 . 01008 [101] - busy (1000)
+        004df800: 01008 . 01008 [101] - busy (1000)
+        004e0808: 01008 . 01008 [101] - busy (1000)
+        004e1810: 01008 . 01008 [101] - busy (1000)
+        004e2818: 01008 . 01008 [101] - busy (1000)
+        004e3820: 01008 . 01008 [101] - busy (1000)
+        004e4828: 01008 . 01008 [101] - busy (1000)
+        004e5830: 01008 . 01008 [101] - busy (1000)
+        004e6838: 01008 . 01008 [101] - busy (1000)
+        004e7840: 01008 . 01008 [101] - busy (1000)
+        004e8848: 01008 . 01008 [101] - busy (1000)
+        004e9850: 01008 . 01008 [101] - busy (1000)
+        004ea858: 01008 . 01008 [101] - busy (1000)
+        004eb860: 01008 . 01008 [101] - busy (1000)
+        004ec868: 01008 . 01008 [101] - busy (1000)
+        004ed870: 01008 . 01008 [101] - busy (1000)
+        004ee878: 01008 . 01008 [101] - busy (1000)
+        004ef880: 01008 . 01008 [101] - busy (1000)
+        004f0888: 01008 . 01008 [101] - busy (1000)
+        004f1890: 01008 . 01008 [101] - busy (1000)
+        004f2898: 01008 . 01008 [101] - busy (1000)
+        004f38a0: 01008 . 01008 [101] - busy (1000)
+        004f48a8: 01008 . 01008 [101] - busy (1000)
+        004f58b0: 01008 . 01008 [101] - busy (1000)
+        004f68b8: 01008 . 01008 [101] - busy (1000)
+        004f78c0: 01008 . 01008 [101] - busy (1000)
+        004f88c8: 01008 . 01008 [101] - busy (1000)
+        004f98d0: 01008 . 01008 [101] - busy (1000)
+        004fa8d8: 01008 . 01008 [101] - busy (1000)
+        004fb8e0: 01008 . 01008 [101] - busy (1000)
+        004fc8e8: 01008 . 006f8 [100]
+        004fcfe0: 006f8 . 00020 [111] - busy (1d)
+        004fd000:      00f93000      - uncommitted bytes.
+
+// Naver enable LFH
