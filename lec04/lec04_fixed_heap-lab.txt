@@ -589,4 +589,4 @@ Index   Address  Name      Debugging options enabled
         004fcfe0: 006f8 . 00020 [111] - busy (1d)
         004fd000:      00f93000      - uncommitted bytes.
 
-// Naver enable LFH
+// Never enable LFH
