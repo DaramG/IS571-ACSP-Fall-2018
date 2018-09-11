@@ -29,21 +29,21 @@
 | 03/09/2018 | Security Vulnerability(2/2)
 | 05/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/03-Windows Debugger.pdf'>Windows Debugger</a> | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/WinDbg_A_to_Z.pdf'>WinDbg_A_to_Z</a>
 | 10/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/04-Windows Heap Internals.pdf'>Windows Heap Internals</a>(1/2) - Standard Heap
-| 12/09/2018 | Windows Heap Internals(2/2) - LFH Heap<br>Custom Heap Manager - About Flash and Chrome| Win7 LFH Heap<br>Win8 Heap Internals<br>Win10 Segment Heap Internals<br>Report #1
-| 17/09/2018 | Objects Tracking(1/3) - C++ Objects | Reversing C++
-| 19/09/2018 | Objects Tracking(2/3) - Flash Objects
+| 12/09/2018 | Windows Heap Internals(2/2) - LFH Heap | Win7 LFH Heap<br>Win8 Heap Internals<br>Win10 Segment Heap Internals<br>Report #1(~9.30.)
+| 17/09/2018 | Custom Heap Manager - About Flash and Chrome
+| 19/09/2018 | Objects Tracking(1/3) - C++ Objects | Reversing C++
 | 24/09/2018 | Chuseok, Korean Harvest Day
 | 26/09/2018 | Chuseok, Korean Harvest Day
-| 01/10/2018 | Objects Tracking(3/3) - Chrome Objects | Report #2
+| 01/10/2018 | Objects Tracking(2/3) - Flash Objects | Report #2(~10.21.)
 | 03/10/2018 | National Foundation Day
-| 08/10/2018 | Heap Exploitation(1/2)
-| 10/10/2018 | Heap Exploitation(2/2)
+| 08/10/2018 | Objects Tracking(3/3) - Chrome Objects
+| 10/10/2018 | Heap Exploitation(1/2)
 | 15/10/2018 | No class(Midterm week)
 | 17/10/2018 | No class(Midterm week)
-| 22/10/2018 | RW Primitives(1/2) - Basic
-| 24/10/2018 | RW Primitives(2/2) - Flash/Chrome RW Primitives | Report #3
-| 29/10/2018 | Control Flow Hijacking(1/2)
-| 31/10/2018 | Control Flow Hijacking(1/2)
+| 22/10/2018 | Heap Exploitation(2/2) | Report #3
+| 24/10/2018 | RW Primitives(1/2) - Basic
+| 29/10/2018 | RW Primitives(2/2) - Flash/Chrome RW Primitives
+| 31/10/2018 | Control Flow Hijacking
 | 05/11/2018 | ROP(1/2) - Return-Oriented Programming | Calling Conventions<br>Intel® 64 and IA-32 Architectures
 | 07/11/2018 | ROP(2/2)
 | 12/11/2018 | Shellcode(1/2)
