@@ -9,7 +9,7 @@
 * Course: IS571 Advanced Cyber Security Practice
 * Time: Mon. 14:30 ~ 15:45 / Wed. 14:30 ~ 15:45
 * Location: N1 #317
-* Office hour: 4:00 pm - 5:30 pm (Tue and Thu) at N5 2218
+* Office hour: 4:00 pm - 5:30 pm (Mon. and Wed.) at N5 2218
 * Grading
 	* 20% Lab assignments
 	* 20% Reports
