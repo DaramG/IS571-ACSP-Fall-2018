@@ -30,7 +30,7 @@
 | 05/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/03-Windows Debugger.pdf'>Windows Debugger</a> | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/WinDbg_A_to_Z.pdf'>WinDbg_A_to_Z</a>
 | 10/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/04-Windows Heap Internals.pdf'>Windows Heap Internals</a>(1/2) - Standard Heap
 | 12/09/2018 | Windows Heap Internals(2/2) - LFH Heap | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/Understanding_the_Low_Fragmentation_Heap.pdf'>Win7 LFH Heap</a><br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/Windows_8_Heap_Internals.pdf'>Win8 Heap Internals</a><br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/Windows_10_Internals.pdf'>Win10 Segment Heap Internals</a><br>Report #1(~9.30.)
-| 17/09/2018 | Custom Heap Manager - About Flash and Chrome
+| 17/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager.pdf'>Custom Heap Manager - About Flash and Chrome</a>
 | 19/09/2018 | Objects Tracking(1/3) - C++ Objects | Reversing C++
 | 24/09/2018 | Chuseok, Korean Harvest Day
 | 26/09/2018 | Chuseok, Korean Harvest Day
