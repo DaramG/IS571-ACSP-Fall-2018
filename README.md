@@ -11,9 +11,9 @@
 * Location: N1 #317
 * Office hour: 4:00 pm - 5:30 pm (Mon. and Wed.) at N5 2218
 * Grading
-	* <del>20% Lab assignments</del>30% Lab assignments
+	* <del>20% Lab assignments</del> 30% Lab assignments
 	* 20% Reports
-	* <del>20% Project</del>30% Project
+	* <del>20% Project</del> 30% Project
 	* <del>20% Mid-term Exam</del>
 	* 20% macOS Part
 * Late submission policy
