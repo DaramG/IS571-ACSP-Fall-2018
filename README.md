@@ -34,7 +34,7 @@
 | 19/09/2018 | Custom Heap Manager - About Chrome
 | 24/09/2018 | Chuseok, Korean Harvest Day
 | 26/09/2018 | Chuseok, Korean Harvest Day
-| 01/10/2018 | Objects Tracking(1/3) - C++ Objects | Reversing C++<br>Report #2(~10.21.)
+| 01/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking(1/3) - C++ Objects</a> | Reversing C++<br>Report #2(~10.21.)
 | 03/10/2018 | National Foundation Day
 | 08/10/2018 | Objects Tracking(2/3) - Flash Objects
 | 10/10/2018 | Objects Tracking(3/3) - Chrome Objects
