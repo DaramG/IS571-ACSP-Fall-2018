@@ -40,8 +40,8 @@
 | 10/10/2018 | Objects Tracking(3/3) - Chrome Objects
 | 15/10/2018 | No class(Midterm week)
 | 17/10/2018 | No class(Midterm week)
-| 22/10/2018 | Heap Exploitation(2/2) | Report #3
-| 24/10/2018 | Heap Exploitation(1/2)
+| 22/10/2018 | Heap Exploitation(1/2) | Report #3
+| 24/10/2018 | Heap Exploitation(2/2)
 | 29/10/2018 | RW Primitives(1/2) - Basic
 | 31/10/2018 | RW Primitives(2/2) - Flash/Chrome RW Primitives
 | 05/11/2018 | Control Flow Hijacking
