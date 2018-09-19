@@ -25,7 +25,7 @@
 | Date       | Topic           | Notes 
 |------------|-----------------|-------
 | 27/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec01/01-Introduction.pdf'>Introduction</a>
-| 29/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec02/02-Security Vulnerability.pdf'>Security Vulnerability(1/2)</a>
+| 29/08/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec02/02-Security Vulnerability.pdf'>Security Vulnerability</a>(1/2)
 | 03/09/2018 | Security Vulnerability(2/2)
 | 05/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/03-Windows Debugger.pdf'>Windows Debugger</a> | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec03/WinDbg_A_to_Z.pdf'>WinDbg_A_to_Z</a>
 | 10/09/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec04/04-Windows Heap Internals.pdf'>Windows Heap Internals</a>(1/2) - Standard Heap
@@ -34,7 +34,7 @@
 | 19/09/2018 | Custom Heap Manager - About Chrome
 | 24/09/2018 | Chuseok, Korean Harvest Day
 | 26/09/2018 | Chuseok, Korean Harvest Day
-| 01/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking(1/3) - C++ Objects</a> | Reversing C++<br>Report #2(~10.21.)
+| 01/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | Reversing C++<br>Report #2(~10.21.)
 | 03/10/2018 | National Foundation Day
 | 08/10/2018 | Objects Tracking(2/3) - Flash Objects
 | 10/10/2018 | Objects Tracking(3/3) - Chrome Objects
