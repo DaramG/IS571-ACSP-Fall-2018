@@ -1,0 +1,273 @@
+
+1. Execute chrome web browser
+
+2. Open an web site(e.g., http://www.naver.com)
+
+3. Attach the renderer process for the Naver web site
+
+4. Setting up the symbol path
+
+0:20> .sympath "SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols;SRV*C:\Symbols*https://chromium-browser-symsrv.commondatastorage.googleapis.com"
+
+5. Symbol download and load
+
+0:20> .reload /i chrome*
+
+6. Analyze PartitionAlloc
+
+
+0:020> .sympath "SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols;SRV*C:\Symbols*https://chromium-browser-symsrv.commondatastorage.googleapis.com"
+Symbol search path is: SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols;SRV*C:\Symbols*https://chromium-browser-symsrv.commondatastorage.googleapis.com
+Expanded Symbol search path is: srv*c:\symbols*https://msdl.microsoft.com/download/symbols;srv*c:\symbols*https://chromium-browser-symsrv.commondatastorage.googleapis.com
+
+************* Symbol Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+Deferred                                       SRV*C:\Symbols*https://chromium-browser-symsrv.commondatastorage.googleapis.com
+
+0:020> dps chrome_child!WTF::Partitions::fast_malloc_allocator_ L4
+13cd8b68  13cd8b88 chrome_child!lazy_fast_malloc+0x4
+13cd8b6c  13cd9bd8 chrome_child!lazy_array_buffer+0x4
+13cd8b70  13cdac28 chrome_child!lazy_buffer+0x4
+13cd8b74  13cdbc78 chrome_child!lazy_layout+0x4
+
+0:020> dt chrome_child!base::PartitionAllocatorGeneric 13cd8b88 
+   +0x000 partition_root_  : base::PartitionRootGeneric
+
+0:020> dt chrome_child!base::PartitionRootGeneric 13cd8b88 
+   +0x000 __VFN_table : 0x132fce9c 
+   +0x004 total_size_of_committed_pages : 0x2df000
+   +0x008 total_size_of_super_pages : 0x400000
+   +0x00c total_size_of_direct_mapped_pages : 0
+   +0x010 num_buckets      : 0
+   +0x014 max_allocation   : 0
+   +0x018 initialized      : 1
+   +0x01c next_super_page  : (null) 
+   +0x020 next_partition_page : 0x0b100000  "--- memory read error at address 0x0b100000 ---"
+   +0x024 next_partition_page_end : 0x0b1fc000  "--- memory read error at address 0x0b1fc000 ---"
+   +0x028 current_extent   : 0x0b001000 base::internal::PartitionSuperPageExtentEntry
+   +0x02c first_extent     : 0x03e01000 base::internal::PartitionSuperPageExtentEntry
+   +0x030 direct_map_list  : (null) 
+   +0x034 global_empty_page_ring : [16] (null) 
+   +0x074 global_empty_page_ring_index : 0n4
+   +0x078 inverted_self    : 0xec327477
+   =13cd2b1c gOomHandlingFunction : 0x102b1be6     void  chrome_child!WTF::Partitions::HandleOutOfMemory+0
+   +0x07c lock             : base::subtle::SpinLock
+   +0x080 order_index_shifts : [33] 0
+   +0x104 order_sub_index_masks : [33] 0
+   +0x188 bucket_lookups   : [265] 0x13cd9134 base::internal::PartitionBucket
+   +0x5ac buckets          : [136] base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionSuperPageExtentEntry 0x03e01000 
+   +0x000 root             : 0x13cd8b88 base::internal::PartitionRootBase
+   +0x004 super_page_base  : 0x03e00000  "--- memory read error at address 0x03e00000 ---"
+   +0x008 super_pages_end  : 0x04000000  "--- memory read error at address 0x04000000 ---"
+   +0x00c next             : 0x0b001000 base::internal::PartitionSuperPageExtentEntry
+
+0:020> !address /f:unk
+                                     
+Mapping file section regions...
+Mapping module regions...
+Mapping PEB regions...
+Mapping TEB and stack regions...
+*** Failure in mapping TEB and Stack (80004002: ExtRemoteTyped::Field: unable to retrieve field 'DeallocationStack' at 0)
+Mapping heap regions...
+*** Failure in mapping Heap (80004002: ExtRemoteTyped::Field: unable to retrieve field 'NumberOfHeaps' at 0)
+Mapping page heap regions...
+Mapping other regions...
+*** Failure in mapping Other (80004002: ExtRemoteTyped::Field: unable to retrieve field 'ProcessParameters' at 0)
+Mapping stack trace database regions...
+Mapping activation context regions...
+
+  BaseAddr EndAddr+1 RgnSize     Type       State                 Protect             Usage
+-----------------------------------------------------------------------------------------------
+ ...
+ 3e00000  3e01000     1000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 3e01000  3e02000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 3e02000  3e04000     2000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 3e04000  3f58000   154000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 3f58000  3f65000     d000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 3f65000  3f80000    1b000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 3f80000  3f84000     4000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 3f84000  3ffc000    78000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [..p....P......T.]
+ 3ffc000  4000000     4000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 
+ 4000000  4001000     1000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 4001000  4002000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 4002000  4004000     2000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 4004000  4150000   14c000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [..........k..web]
+ 4150000  4162000    12000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 4162000  4164000     2000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 4164000  41a6000    42000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 41a6000  41f4000    4e000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 41f4000  4200000     c000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ ...
+ 5d00000  5d80000    80000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [.........A......]
+ 5e00000  5e01000     1000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 5e01000  5e02000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [x...............]
+ 5e02000  5e04000     2000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 5e04000  5ef8000    f4000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [............xE..]
+ 5ef8000  6000000   108000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ ...
+ 6a00000  6a01000     1000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6a01000  6a02000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6a02000  6a04000     2000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6a04000  6a7c000    78000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [.............P..]
+ 6a7c000  6a8b000     f000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6a8b000  6a9c000    11000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6a9c000  6aab000     f000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6aab000  6b0c000    61000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6b0c000  6b18000     c000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6b18000  6b48000    30000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [........ly..http]
+ 6b48000  6b68000    20000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6b68000  6b94000    2c000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6b94000  6b9f000     b000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6b9f000  6ba0000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6ba0000  6bab000     b000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6bab000  6bac000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6bac000  6bc2000    16000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6bc2000  6bc4000     2000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6bc4000  6bda000    16000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ 6bda000  6bdc000     2000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+ 6bdc000  6c00000    24000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+ ...
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac
+   +0x000 active_pages_head : 0x03e010a0 base::internal::PartitionPage
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 8
+   +0x010 num_system_pages_per_slot_span : 0y00000100 (0x4)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> ??sizeof(chrome_child!base::internal::PartitionBucket)
+unsigned int 0x14
+
+0:020> dt chrome_child!base::internal::PartitionBucket 61168b88 + 5ac + 14 * 0
+   +0x000 active_pages_head : ???? 
+   +0x004 empty_pages_head : ???? 
+   +0x008 decommitted_pages_head : ???? 
+   +0x00c slot_size        : ??
+   +0x010 num_system_pages_per_slot_span : ??
+   +0x010 num_full_pages   : ??
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+Memory read error 61169140
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 0
+   +0x000 active_pages_head : 0x03e010a0 base::internal::PartitionPage
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 8
+   +0x010 num_system_pages_per_slot_span : 0y00000100 (0x4)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 1
+   +0x000 active_pages_head : (null) 
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 9
+   +0x010 num_system_pages_per_slot_span : 0y00001100 (0xc)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 2
+   +0x000 active_pages_head : (null) 
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 0xa
+   +0x010 num_system_pages_per_slot_span : 0y00001100 (0xc)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 3
+   +0x000 active_pages_head : (null) 
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 0xb
+   +0x010 num_system_pages_per_slot_span : 0y00001100 (0xc)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 4
+   +0x000 active_pages_head : (null) 
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 0xc
+   +0x010 num_system_pages_per_slot_span : 0y00001100 (0xc)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 5
+   +0x000 active_pages_head : (null) 
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 0xd
+   +0x010 num_system_pages_per_slot_span : 0y00010000 (0x10)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 0n135
+   +0x000 active_pages_head : 0x13cd2b48 base::internal::PartitionPage
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 0xf0000
+   +0x010 num_system_pages_per_slot_span : 0y11110000 (0xf0)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionBucket 13cd8b88 + 5ac + 14 * 0
+   +0x000 active_pages_head : 0x03e010a0 base::internal::PartitionPage
+   +0x004 empty_pages_head : (null) 
+   +0x008 decommitted_pages_head : (null) 
+   +0x00c slot_size        : 8
+   +0x010 num_system_pages_per_slot_span : 0y00000100 (0x4)
+   +0x010 num_full_pages   : 0y000000000000000000000000 (0)
+   =13cd2b34 sentinel_bucket_ : base::internal::PartitionBucket
+
+0:020> dt chrome_child!base::internal::PartitionPage 0x03e010a0 
+   +0x000 freelist_head    : 0x03e151c0 base::internal::PartitionFreelistEntry
+   +0x004 next_page        : (null) 
+   +0x008 bucket           : 0x13cd9134 base::internal::PartitionBucket
+   +0x00c num_allocated_slots : 0n459
+   +0x00e num_unprovisioned_slots : 0x200
+   +0x010 page_offset      : 0
+   +0x012 empty_cache_index : 0n-1
+   =13cd2b48 sentinel_page_   : base::internal::PartitionPage
+
+0:020> dc 0x03e151c0 
+03e151c0  e850e103 00000000 c8430030 06b44160  ..P.....0.C.`A..
+03e151d0  1050e103 06b45df8 d8430030 06b438a8  ..P..]..0.C..8..
+03e151e0  2052e103 06b46008 e8430030 06b69ca0  ..R .`..0.C.....
+03e151f0  5051e103 00000000 9054e103 06b45df8  ..QP......T..]..
+03e15200  00430030 06b3f5d0 08430030 06b441c0  0.C.....0.C..A..
+03e15210  1053e103 06b69b40 18430030 06b69c00  ..S.@...0.C.....
+03e15220  6052e103 06b6db60 28430030 06b44190  ..R``...0.C(.A..
+03e15230  9052e103 00000000 38430030 06b44448  ..R.....0.C8HD..
+
+0:020> dc 03e150e8
+03e150e8  d85de103 00000000 d04ee103 06b45df8  ..].......N..]..
+03e150f8  f8430030 06b44178 e050e103 03e43960  0.C.xA....P.`9..
+03e15108  08430020 06b69c60 b051e103 00000000   .C.`.....Q.....
+03e15118  18430020 06b44328 20430030 06b3f600   .C.(C..0.C ....
+03e15128  28430030 06b44448 7051e103 06b69b40  0.C(HD....Qp@...
+03e15138  38430030 06b43950 e051e103 06b69b40  0.C8P9....Q.@...
+03e15148  48430010 03e0d490 1051e103 00000000  ..CH......Q.....
+03e15158  58430010 03e0d550 60430030 06b3f330  ..CXP...0.C`0...
+
+0:020> ?03e151c0 & 0x-200000
+Evaluate expression: 65011712 = 03e00000
+
+0:020> ?(03e151c0 & 0x1fffff)/0n16384
+Evaluate expression: 5 = 00000005
+
+0:020> dt chrome_child!base::internal::PartitionPage 03e00000 + 1000 + 20*5
+   +0x000 freelist_head    : 0x03e151c0 base::internal::PartitionFreelistEntry
+   +0x004 next_page        : (null) 
+   +0x008 bucket           : 0x13cd9134 base::internal::PartitionBucket
+   +0x00c num_allocated_slots : 0n459
+   +0x00e num_unprovisioned_slots : 0x200
+   +0x010 page_offset      : 0
+   +0x012 empty_cache_index : 0n-1
+   =13cd2b48 sentinel_page_   : base::internal::PartitionPage
