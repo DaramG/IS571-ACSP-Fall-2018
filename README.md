@@ -34,20 +34,20 @@
 | 19/09/2018 | Custom Heap Manager(2/3) - About Chrome
 | 24/09/2018 | Chuseok, Korean Harvest Day
 | 26/09/2018 | Chuseok, Korean Harvest Day
-| 01/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager_summary.pdf'>Custom Heap Manager</a>(3/3) - Extra<br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | Reversing C++<br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager-Report02.pdf'>Report #2</a>(~10.21.)
+| 01/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager_summary.pdf'>Custom Heap Manager</a>(3/3) - Extra<br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager-Report02.pdf'>Report #2</a>(~10.21.)
 | 03/10/2018 | National Foundation Day
-| 08/10/2018 | Objects Tracking(2/3) - Flash Objects
-| 10/10/2018 | Objects Tracking(3/3) - Chrome Objects
+| 08/10/2018 | <br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | Reversing C++
+| 10/10/2018 | Objects Tracking(2/3) - Flash Objects
 | 15/10/2018 | No class(Midterm week)
 | 17/10/2018 | No class(Midterm week)
-| 22/10/2018 | Heap Exploitation(1/2) | Report #3
-| 24/10/2018 | Heap Exploitation(2/2)
-| 29/10/2018 | RW Primitives(1/2) - Basic
-| 31/10/2018 | RW Primitives(2/2) - Flash/Chrome RW Primitives
-| 05/11/2018 | Control Flow Hijacking
-| 07/11/2018 | ROP - Return-Oriented Programming | Calling Conventions<br>Intel® 64 and IA-32 Architectures
-| 12/11/2018 | Shellcode(1/2)
-| 14/11/2018 | Shellcode(2/2)
+| 22/10/2018 | Objects Tracking(3/3) - Chrome Objects
+| 24/10/2018 | Heap Exploitation(1/2) | Report #3
+| 29/10/2018 | Heap Exploitation(2/2) 
+| 31/10/2018 | RW Primitives
+| 05/11/2018 | No lecture | Supplementary lecture(12/11/2018 14:00~14:30)
+| 07/11/2018 | No lecture | Supplementary lecture(14/11/2018 14:00~14:30)
+| 12/11/2018 | Control Flow Hijacking<br>ROP - Return-Oriented Programming | Calling Conventions<br>Intel® 64 and IA-32 Architectures
+| 14/11/2018 | Shellcode
 | 19/11/2018 | macOS Architecture | Mac OS X and IOS Internals: To the Apple's Core
 | 21/11/2018 | macOS March-O and Dynamic Linker
 | 26/11/2018 | macOS Process Internals, Memory Mgmt.,<br> and Objective-C
