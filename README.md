@@ -36,7 +36,7 @@
 | 26/09/2018 | Chuseok, Korean Harvest Day
 | 01/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager_summary.pdf'>Custom Heap Manager</a>(3/3) - Extra<br><a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec05/05-Custom Heap Manager-Report02.pdf'>Report #2</a>(~10.21.)
 | 03/10/2018 | National Foundation Day
-| 08/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | Reversing C++
+| 08/10/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/06-Objects Tracking.pdf'>Objects Tracking</a>(1/3) - C++ Objects | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec06/bh-dc-07-Sabanal_Yason-WP.pdf'>Reversing C++</a>
 | 10/10/2018 | Objects Tracking(2/3) - Flash Objects
 | 15/10/2018 | No class(Midterm week)
 | 17/10/2018 | No class(Midterm week)
