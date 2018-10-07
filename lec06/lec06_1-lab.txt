@@ -1,0 +1,290 @@
+0:001> lm
+start    end        module name
+011b0000 011b6000   lec06_1    (deferred)             
+69df0000 69ede000   MSVCR120   (deferred)             
+75580000 755cb000   KERNELBASE   (deferred)             
+75dd0000 75ea5000   kernel32   (deferred)             
+774b0000 775f2000   ntdll      (pdb symbols)          c:\symbols\ntdll.pdb\40AECA28CA3C4AC8A2A6E74DB8594FB22\ntdll.pdb
+
+0:001> .reload /i
+Reloading current modules
+.*** WARNING: Unable to verify checksum for C:\Ground\lec06_1.exe
+....
+
+0:001> lm
+start    end        module name
+011b0000 011b6000   lec06_1  C (private pdb symbols)  C:\Ground\lec06_1.pdb
+69df0000 69ede000   MSVCR120   (private pdb symbols)  c:\symbols\msvcr120.i386.pdb\16F5E2EF340A453ABC8B8F67DC6FD8082\msvcr120.i386.pdb
+75580000 755cb000   KERNELBASE   (pdb symbols)          c:\symbols\kernelbase.pdb\EA88781C403E41D7B8B18B8BB71B048F2\kernelbase.pdb
+75dd0000 75ea5000   kernel32   (pdb symbols)          c:\symbols\kernel32.pdb\69B44B85F9D84460BA1A23B5BB081D502\kernel32.pdb
+774b0000 775f2000   ntdll      (pdb symbols)          c:\symbols\ntdll.pdb\40AECA28CA3C4AC8A2A6E74DB8594FB22\ntdll.pdb
+
+0:001> dt lec06_1!B1*
+          lec06_1!B1
+          lec06_1!B1
+011b1000  lec06_1!B1::f1
+
+0:001> ??sizeof(B1)
+unsigned int 8
+
+0:001> dps 17af68 L(8/4)
+0017af68  011b2148 lec06_1!B1::`vftable'
+0017af6c  b1b1b1b1
+
+0:001> dps 11b2148 L4
+011b2148  011b1000 lec06_1!B1::f1 [c:\workdir\lecture\lec06\lec06\lec06.cpp @ 10]
+011b214c  00000000
+011b2150  00000048
+011b2154  00000000
+
+0:001> !address 17af68
+
+Usage:                  Heap
+Base Address:           00160000
+End Address:            0017e000
+Region Size:            0001e000 ( 120.000 kB)
+State:                  00001000          MEM_COMMIT
+Protect:                00000004          PAGE_READWRITE
+Type:                   00020000          MEM_PRIVATE
+Allocation Base:        00160000
+Allocation Protect:     00000004          PAGE_READWRITE
+More info:              heap owning the address: !heap 0x160000
+More info:              heap segment
+More info:              heap entry containing the address: !heap -x 0x17af68
+
+
+Content source: 1 (target), length: 98
+
+0:001> !heap -lh 160000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Searching the memory for potential unreachable busy blocks.
+Heap 00160000
+Heap 00010000
+Heap 00020000
+Scanning VM ...
+Scanning references from 145 busy blocks (0 MBytes) ...
+Entry     User      Heap      Segment       Size  PrevSize  Unused    Flags
+-----------------------------------------------------------------------------
+00179fc0  00179fc8  00160000  00160000        88       808         8  busy 
+1 potential unreachable blocks were detected.
+
+0:001> !heap -s
+SEGMENT HEAP ERROR: failed to initialize the extention
+LFH Key                   : 0x41c78c25
+Termination on corruption : ENABLED
+  Heap     Flags   Reserv  Commit  Virt   Free  List   UCR  Virt  Lock  Fast 
+                    (k)     (k)    (k)     (k) length      blocks cont. heap 
+-----------------------------------------------------------------------------
+00160000 00000002    1024    120   1024      7     2     1    0      0   LFH
+00010000 00008000      64      4     64      2     1     1    0      0      
+00020000 00008000      64     64     64     54     1     1    0      0      
+-----------------------------------------------------------------------------
+
+0:001> !heap -hl 160000
+SEGMENT HEAP ERROR: failed to initialize the extention
+Index   Address  Name      Debugging options enabled
+  1:   00160000 
+    Segment at 00160000 to 00260000 (0001e000 bytes committed)
+    Flags:                00000002
+    ForceFlags:           00000000
+    Granularity:          8 bytes
+    Segment Reserve:      00100000
+    Segment Commit:       00002000
+    DeCommit Block Thres: 00000800
+    DeCommit Total Thres: 00002000
+    Total Free Size:      000003ae
+    Max. Allocation Size: 7ffdefff
+    Lock Variable at:     00160138
+    Next TagIndex:        0000
+    Maximum TagIndex:     0000
+    Tag Entries:          00000000
+    PsuedoTag Entries:    00000000
+    Virtual Alloc List:   001600a0
+    Uncommitted ranges:   00160090
+    FreeList[ 00 ] at 001600c4: 0017cff0 . 0017af78   (2 blocks)
+
+    Heap entries for Segment00 in Heap 00160000
+         address: psize . size  flags   state (requested size)
+        00160000: 00000 . 00588 [101] - busy (587)
+        00160588: 00588 . 00240 [101] - busy (23f)
+        001607c8: 00240 . 00020 [101] - busy (18)
+        001607e8: 00020 . 00bc0 [101] - busy (bb6)
+        001613a8: 00bc0 . 00938 [101] - busy (92a)
+        00161ce0: 00938 . 00048 [101] - busy (3c)
+        00161d28: 00048 . 00038 [101] - busy (30)
+        00161d60: 00038 . 00080 [101] - busy (78)
+        00161de0: 00080 . 00080 [101] - busy (78)
+        00161e60: 00080 . 00228 [101] - busy (220)
+        00162088: 00228 . 00050 [101] - busy (42)
+        001620d8: 00050 . 00080 [101] - busy (78)
+        00162158: 00080 . 00018 [101] - busy (10)
+        00162170: 00018 . 00050 [101] - busy (46)
+        001621c0: 00050 . 00080 [101] - busy (78)
+        00162240: 00080 . 00018 [101] - busy (10)
+        00162258: 00018 . 00018 [101] - busy (10)
+        00162270: 00018 . 00050 [101] - busy (42)
+        001622c0: 00050 . 00028 [101] - busy (19)
+        001622e8: 00028 . 00070 [101] - busy (64)
+        00162358: 00070 . 00208 [101] - busy (200)
+        00162560: 00208 . 00208 [101] - busy (200)
+        00162768: 00208 . 00030 [101] - busy (24)
+        00162798: 00030 . 00030 [101] - busy (24)
+        001627c8: 00030 . 00038 [101] - busy (30)
+        00162800: 00038 . 00028 [101] - busy (20)
+        00162828: 00028 . 00028 [101] - busy (20)
+        00162850: 00028 . 00028 [101] - busy (20)
+        00162878: 00028 . 00028 [101] - busy (20)
+        001628a0: 00028 . 00028 [101] - busy (20)
+        001628c8: 00028 . 00028 [101] - busy (20)
+        001628f0: 00028 . 00080 [101] - busy (78)
+        00162970: 00080 . 00018 [101] - busy (10)
+        00162988: 00018 . 00018 [101] - busy (10)
+        001629a0: 00018 . 00018 [101] - busy (10)
+        001629b8: 00018 . 00018 [101] - busy (10)
+        001629d0: 00018 . 00028 [101] - busy (20)
+        001629f8: 00028 . 00028 [101] - busy (20)
+        00162a20: 00028 . 00028 [101] - busy (20)
+        00162a48: 00028 . 00028 [101] - busy (20)
+        00162a70: 00028 . 00028 [101] - busy (20)
+        00162a98: 00028 . 00028 [101] - busy (20)
+        00162ac0: 00028 . 00028 [101] - busy (20)
+        00162ae8: 00028 . 00028 [101] - busy (20)
+        00162b10: 00028 . 00028 [101] - busy (20)
+        00162b38: 00028 . 00028 [101] - busy (20)
+        00162b60: 00028 . 00028 [101] - busy (20)
+        00162b88: 00028 . 00020 [101] - busy (18)
+        00162ba8: 00020 . 00018 [101] - busy (d)
+        00162bc0: 00018 . 00050 [101] - busy (42)
+        00162c10: 00050 . 03d20 [101] - busy (3d1f)
+        00166930: 03d20 . 10790 [101] - busy (10788) Internal 
+        001770c0: 10790 . 00800 [101] - busy (7f8) Internal 
+
+        LFH data region at 001770c8 (subsegment 001778d8):
+            001770d8: 00028 - busy (20)
+            00177100: 00028 - busy (20)
+            00177128: 00028 - busy (20)
+            00177150: 00028 - busy (20)
+            00177178: 00028 - busy (20)
+            001771a0: 00028 - busy (20)
+            001771c8: 00028 - busy (20)
+            001771f0: 00028 - busy (1f)
+            00177218: 00028 - busy (1b)
+            00177240: 00028 - busy (1b)
+            00177268: 00028 - busy (1e)
+            00177290: 00028 - busy (1c)
+            001772b8: 00028 - busy (1a)
+            001772e0: 00028 - busy (1c)
+            00177308: 00028 - busy (1e)
+            00177330: 00028 - busy (20)
+            00177358: 00028 - free
+            00177380: 00028 - free
+            001773a8: 00028 - free
+            001773d0: 00028 - free
+            001773f8: 00028 - free
+            00177420: 00028 - free
+            00177448: 00028 - free
+            00177470: 00028 - free
+            00177498: 00028 - free
+            001774c0: 00028 - free
+            001774e8: 00028 - free
+            00177510: 00028 - free
+            00177538: 00028 - free
+            00177560: 00028 - free
+            00177588: 00028 - free
+            001775b0: 00028 - free
+            001775d8: 00028 - free
+            00177600: 00028 - free
+            00177628: 00028 - free
+            00177650: 00028 - free
+            00177678: 00028 - free
+            001776a0: 00028 - free
+            001776c8: 00028 - free
+            001776f0: 00028 - free
+            00177718: 00028 - free
+            00177740: 00028 - free
+            00177768: 00028 - free
+            00177790: 00028 - free
+            001777b8: 00028 - free
+            001777e0: 00028 - free
+            00177808: 00028 - free
+            00177830: 00028 - free
+            00177858: 00028 - free
+            00177880: 00028 - free
+
+        001778c0: 00800 . 00400 [101] - busy (3f8) Internal 
+        00177cc0: 00400 . 00210 [101] - busy (208)
+        00177ed0: 00210 . 00408 [101] - busy (400)
+        001782d8: 00408 . 003c8 [101] - busy (3bc)
+        001786a0: 003c8 . 00808 [101] - busy (800)
+        00178ea8: 00808 . 00228 [101] - busy (220)
+        001790d0: 00228 . 00090 [101] - busy (88)
+        00179160: 00090 . 00030 [101] - busy (28)
+        00179190: 00030 . 00040 [101] - busy (31)
+        001791d0: 00040 . 00020 [101] - busy (16)
+        001791f0: 00020 . 00030 [101] - busy (24)
+        00179220: 00030 . 00020 [101] - busy (14)
+        00179240: 00020 . 00020 [101] - busy (17)
+        00179260: 00020 . 00038 [101] - busy (2b)
+        00179298: 00038 . 00020 [101] - busy (17)
+        001792b8: 00020 . 00020 [101] - busy (17)
+        001792d8: 00020 . 00018 [101] - busy (e)
+        001792f0: 00018 . 001c0 [101] - busy (1b6)
+        001794b0: 001c0 . 00048 [101] - busy (3e)
+        001794f8: 00048 . 00050 [101] - busy (45)
+        00179548: 00050 . 00020 [101] - busy (12)
+        00179568: 00020 . 00020 [101] - busy (18)
+        00179588: 00020 . 00050 [101] - busy (41)
+        001795d8: 00050 . 00020 [101] - busy (17)
+        001795f8: 00020 . 00020 [101] - busy (14)
+        00179618: 00020 . 00018 [101] - busy (f)
+        00179630: 00018 . 00020 [101] - busy (16)
+        00179650: 00020 . 00030 [101] - busy (28)
+        00179680: 00030 . 00030 [101] - busy (27)
+        001796b0: 00030 . 00020 [101] - busy (14)
+        001796d0: 00020 . 00018 [101] - busy (10)
+        001796e8: 00018 . 00058 [101] - busy (4c)
+        00179740: 00058 . 00058 [101] - busy (4c)
+        00179798: 00058 . 00020 [101] - busy (12)
+        001797b8: 00020 . 00808 [101] - busy (800)
+        00179fc0: 00808 . 00088 [101] - busy (80)
+        0017a048: 00088 . 00060 [101] - busy (54)
+        0017a0a8: 00060 . 00018 [101] - busy (c)
+        0017a0c0: 00018 . 00020 [101] - busy (18)
+        0017a0e0: 00020 . 00448 [101] - busy (440)
+        0017a528: 00448 . 00040 [101] - busy (34)
+        0017a568: 00040 . 00038 [101] - busy (2e)
+        0017a5a0: 00038 . 00038 [101] - busy (2e)
+        0017a5d8: 00038 . 00378 [101] - busy (36c)
+        0017a950: 00378 . 00088 [101] - busy (7c)
+        0017a9d8: 00088 . 00040 [101] - busy (36)
+        0017aa18: 00040 . 00098 [101] - busy (8a)
+        0017aab0: 00098 . 00030 [101] - busy (24)
+        0017aae0: 00030 . 00038 [101] - busy (30)
+        0017ab18: 00038 . 00040 [101] - busy (36)
+        0017ab58: 00040 . 00048 [101] - busy (3c)
+        0017aba0: 00048 . 00090 [101] - busy (82)
+        0017ac30: 00090 . 00038 [101] - busy (2e)
+        0017ac68: 00038 . 00030 [101] - busy (28)
+        0017ac98: 00030 . 00038 [101] - busy (2c)
+        0017acd0: 00038 . 00058 [101] - busy (50)
+        0017ad28: 00058 . 00058 [101] - busy (4e)
+        0017ad80: 00058 . 00030 [101] - busy (28)
+        0017adb0: 00030 . 00040 [101] - busy (38)
+        0017adf0: 00040 . 000a0 [101] - busy (98)
+        0017ae90: 000a0 . 000a0 [101] - busy (98)
+        0017af30: 000a0 . 00030 [101] - busy (24)
+        0017af60: 00030 . 00010 [101] - busy (8)
+        0017af70: 00010 . 00d78 [100]
+        0017bce8: 00d78 . 00090 [101] - busy (88)
+        0017bd78: 00090 . 00048 [101] - busy (3e)
+        0017bdc0: 00048 . 00058 [101] - busy (50)
+        0017be18: 00058 . 00070 [101] - busy (62)
+        0017be88: 00070 . 00038 [101] - busy (2c)
+        0017bec0: 00038 . 00050 [101] - busy (48)
+        0017bf10: 00050 . 00030 [101] - busy (28)
+        0017bf40: 00030 . 00038 [101] - busy (2e)
+        0017bf78: 00038 . 00068 [101] - busy (56)
+        0017bfe0: 00068 . 01008 [101] - busy (1000)
+        0017cfe8: 01008 . 00ff8 [100]
+        0017dfe0: 00ff8 . 00020 [111] - busy (1d)
+        0017e000:      000e2000      - uncommitted bytes.
