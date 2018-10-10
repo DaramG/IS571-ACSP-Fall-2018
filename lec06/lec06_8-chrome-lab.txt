@@ -1,0 +1,410 @@
+1. <Cmd.exe> Execute chrome.exe with arguments --renderer-startup-dialog --no-sandbox
+    more info.: https://www.chromium.org/developers/how-tos/debugging-on-windows
+
+2. <Chrome> Access any website and get pid of the renderer process
+    URL: about:blank
+
+3. <Chrome> Execute developer tools
+    short key: ctrl + shift + i
+
+4. <DevTool> Write script code
+    var xxx = new ArrayBuffer(0x40);
+    var obj_array = [1, "Volvo", xxx];
+    obj_array[0] = 0x22222222;
+
+5. <Windbg> Attach windbg into the renderer process
+
+6. <Windbg> Set breakpoint
+    0:000> .sympath
+    Symbol search path is: SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+    Expanded Symbol search path is: srv*c:\symbols*https://msdl.microsoft.com/download/symbols
+
+    ************* Symbol Path validation summary **************
+    Response                         Time (ms)     Location
+    Deferred                                       SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+
+    0:000> .sympath "SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols;https://chromium-browser-symsrv.commondatastorage.googleapis.com"
+    Symbol search path is: SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols;https://chromium-browser-symsrv.commondatastorage.googleapis.com
+    Expanded Symbol search path is: srv*c:\symbols*https://msdl.microsoft.com/download/symbols;https://chromium-browser-symsrv.commondatastorage.googleapis.com
+
+    ************* Symbol Path validation summary **************
+    Response                         Time (ms)     Location
+    Deferred                                       SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols
+    Deferred                                       https://chromium-browser-symsrv.commondatastorage.googleapis.com
+
+    0:000> .reload /i chrome*
+           // Get the address of 'chrome_child!v8::internal::FixedArray::set' using Disassembly windows
+    0:000> x chrome_child!v8::internal::*:ElementsKindTraits<HOLEY_ELEMENTS> >::Set
+    10d5ab00          chrome_child!v8::internal::`anonymous namespace'::ElementsAccessorBase<v8::internal::(anonymous namespace)::FastHoleyObjectElementsAccessor,v8::internal::(anonymous namespace)::ElementsKindTraits<HOLEY_ELEMENTS> >::Set (class v8::internal::Handle<v8::internal::JSObject>, unsigned int, class v8::internal::Object *)
+    0:000> u 10d5ab00 + 0x17
+    0:000> g
+
+7. <DevTool> Write break code 
+    > obj_array[0] = 0x22222222;
+
+8. <Windbg> dd eax 
+    0:000> r                                          <-- means obj_array buffer
+    eax=04c7a695 ebx=44444444 ecx=00000000 edx=13270580 esi=04c7a695 edi=0013eac0
+    eip=10d5ab17 esp=0013e850 ebp=0013e860 iopl=0         nv up ei pl nz na po nc
+    cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000202
+    chrome_child!v8::internal::`anonymous namespace'::ElementsAccessorBase<v8::internal::(anonymous namespace)::FastHoleyObjectElementsAccessor,v8::internal::(anonymous namespace)::ElementsKindTraits<HOLEY_ELEMENTS> >::Set+0x17:
+    10d5ab17 895c8807        mov     dword ptr [eax+ecx*4+7],ebx ds:0023:04c7a69c=00000002
+    0:000> dc eax-1
+    04c7a694  04a041e5 00000006 00000002 04aa3e41  .A......""""A>..
+                                -------- -------- 
+                                1        "Volvo"
+    04c7a6a4  04c7a665 04a04611 00000003 00000034  e....F......4...
+              --------
+              xxx
+    04c7a6b4  5f6a626f 61727261 5d305b79 30203d20  obj_array[0] = 0
+
+9. <Windbg> Display the "Volvo" string object
+    04aa3e40  04e84341 f3ef69ce 0000000a 766c6f56  AC...i......Volv
+    04aa3e50  0000006f 04e84679 050ff779 050ff6e1  o...yF..y.......
+
+10. <Windbg> Display the "xxx" ArrayBuffer object
+    0:000> dc 04c7a664
+    04c7a664  06c90391 04a041dd 04a041dd 00000080  .....A...A......
+    04c7a674  07408000 00000004 00000000 00000000  ..@.............
+    04c7a684  06c8e735 04a041dd 04c7a695 00000006  5....A..........
+
+    0:000> dc 07408000 
+    07408000  00000000 00000000 00000000 00000000  ................
+    07408010  00000000 00000000 00000000 00000000  ................
+    07408020  00000000 00000000 00000000 00000000  ................
+    07408030  00000000 00000000 00000000 00000000  ................
+    07408040  80804007 00000000 00000000 00000000  .@..............
+    07408050  00000000 00000000 00000000 00000000  ................
+    07408060  00000000 00000000 00000000 00000000  ................
+    07408070  00000000 00000000 00000000 00000000  ................
+
+    0:000> g
+
+11. <DevTool> 
+    ------------------------------------------
+    var u32 = new Uint32Array(xxx);
+    u32[0] = 0x11111111;
+    u32[1] = 0x22222222;
+    obj_array[0] = 0x22222222;
+    ------------------------------------------
+
+    (13e8.adc): Break instruction exception - code 80000003 (first chance)
+    eax=7ffa4000 ebx=00000000 ecx=00000000 edx=778eec3b esi=00000000 edi=00000000
+    eip=77883bec esp=08a5fe98 ebp=08a5fec4 iopl=0         nv up ei pl zr na pe nc
+    cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00000246
+    ntdll!DbgBreakPoint:
+    77883bec cc              int     3
+
+    0:023> dc 07408000 
+    07408000  11111111 22222222 00000000 00000000  ....""""........
+    07408010  00000000 00000000 00000000 00000000  ................
+    07408020  00000000 00000000 00000000 00000000  ................
+    07408030  00000000 00000000 00000000 00000000  ................
+    
+12. Analyze PartitionAlloc: new ArrayBuffer(0x40)
+
+    0:023> ?07408000 & 0x-200000
+    Evaluate expression: 121634816 = 07400000
+    
+    0:023> dc 07400000
+    07400000  ???????? ???????? ???????? ????????  ????????????????
+    07400010  ???????? ???????? ???????? ????????  ????????????????
+    07400020  ???????? ???????? ???????? ????????  ????????????????
+
+    0:023> !address /f:unk
+
+    BaseAddr EndAddr+1 RgnSize     Type       State                 Protect             Usage
+    -----------------------------------------------------------------------------------------------
+    ...
+    7400000  7401000     1000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+    7401000  7402000     1000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [................]
+    7402000  7404000     2000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+    7404000  740c000     8000 MEM_PRIVATE MEM_COMMIT  PAGE_READWRITE                     <unknown>  [..o.............]
+    740c000  7600000   1f4000 MEM_PRIVATE MEM_RESERVE                                    <unknown>  
+    ...
+
+    0:023> dc 07400000 + 1000
+    07401000  13bb9bd8 07400000 07600000 00000000  ......@...`.....
+    07401010  00000000 00000000 00000000 00000000  ................
+    07401020  07404008 00000000 13bba184 06000001  .@@.............
+    07401030  ffff0000 00000000 00000000 00000000  ................
+    07401040  07408040 00000000 13bba364 00c00001  @.@.....d.......
+    07401050  ffff0000 00000000 00000000 00000000  ................
+    07401060  00000000 00000000 00000000 00000000  ................
+    07401070  00000000 00000000 00000000 00000000  ................
+    
+    ...
+
+13. Analyze V8 Heap: var xxx = ...
+
+    0:023> dc 04c7a664
+    04c7a664  06c90391 04a041dd 04a041dd 00000080  .....A...A......
+    04c7a674  07408000 00000004 00000000 00000000  ..@.............
+    04c7a684  06c8e735 04a041dd 04c7a695 00000006  5....A..........
+    04c7a694  04a041e5 00000006 44444444 04aa3e41  .A......DDDDA>..
+    
+    0:023> !address 04c7a664
+
+    Usage:                  <unknown>
+    Base Address:           04c00000
+    End Address:            04c80000
+    Region Size:            00080000 ( 512.000 kB)
+    State:                  00001000          MEM_COMMIT
+    Protect:                00000004          PAGE_READWRITE
+    Type:                   00020000          MEM_PRIVATE
+    Allocation Base:        04c00000
+    Allocation Protect:     00000001          PAGE_NOACCESS
+
+14. <DevTool> Create a div object into 4th element of the obj_array
+
+    var div = document.createElement('div');
+    obj_array[3] = div;
+    obj_array[0] = 0x22222222;   <-- break code
+
+15. <Windbg> Display the Div object
+
+    0:000> dc eax-1
+    06d29e54  04a041e5 0000002c 44444444 04aa3e41  .A..,...DDDDA>..
+    06d29e64  04c7a665 06d2d431 04a04421 04a04421  e...1...!D..!D..
+                       --------
+                       div
+    06d29e74  04a04421 04a04421 04a04421 04a04421  !D..!D..!D..!D..
+    06d29e84  04a04421 04a04421 04a04421 04a04421  !D..!D..!D..!D..
+    06d29e94  04a04421 04a04421 04a04421 04a04421  !D..!D..!D..!D..
+    06d29ea4  04a04421 04a04421 04a04421 04a04421  !D..!D..!D..!D..
+    06d29eb4  04a04611 00000003 00000026 5f6a626f  .F......&...obj_
+    06d29ec4  61727261 5d335b79 64203d20 003b7669  array[3] = div;.
+
+    0:000> dc 06d2d431 -1
+    06d2d430  06c87909 04a041dd 04a041dd 134bbdd8  .y...A...A....K.
+    06d2d440  061428a0 04a04611 00000003 00000008  .(...F..........
+    06d2d450  73696874 04a041e5 00000002 00000008  this.A..........
+    06d2d460  04a051f9 00000002 00000003 04a041e5  .Q...........A..
+    06d2d470  00000002 00000002 04a051f9 00000002  .........Q......
+    06d2d480  06d11f9b 04a0508d 00000016 00000002  .....P..........
+    06d2d490  00000000 00000008 00000002 06d2d4b9  ................
+    06d2d4a0  04a0438d 04a0438d 04a0438d 04a0438d  .C...C...C...C..
+
+    0:000> dps 06d2d430
+    06d2d430  06c87909
+    06d2d434  04a041dd
+    06d2d438  04a041dd
+    06d2d43c  134bbdd8 chrome_child!wrapperTypeInfo
+    06d2d440  061428a0  <--- 
+    06d2d444  04a04611
+    06d2d448  00000003
+    06d2d44c  00000008
+    
+    0:000> dps 061428a0
+    061428a0  13622910 chrome_child!blink::HTMLDivElement::`vftable'
+    061428a4  0a8ed3a8 <--- main_world_wrapper_
+    061428a8  000e101d
+    061428ac  00000000
+    061428b0  06142088
+    061428b4  00000000
+    061428b8  00000000
+    061428bc  05686a50
+    061428c0  00000000
+    061428c4  00000000
+    061428c8  04608e70
+    ...
+
+    0:000> dt chrome_child!blink::HTMLDivElement 061428a0  
+    +0x000 __VFN_table : 0x13622910 
+    +0x004 main_world_wrapper_ : blink::TraceWrapperV8Reference<v8::Object> 
+    =134bb84c wrapper_type_info_ : 0x134bb834 blink::WrapperTypeInfo
+    =134bd5e0 wrapper_type_info_ : 0x134bd5c8 blink::WrapperTypeInfo
+    +0x008 node_flags_      : 0xe101d
+    +0x00c parent_or_shadow_host_node_ : blink::TraceWrapperMember<blink::Node>
+    +0x010 tree_scope_      : blink::Member<blink::TreeScope>
+    +0x014 previous_        : blink::TraceWrapperMember<blink::Node>
+    +0x018 next_            : blink::TraceWrapperMember<blink::Node>
+    +0x01c data_            : blink::Node::DataUnion
+    +0x020 first_child_     : blink::TraceWrapperMember<blink::Node>
+    +0x024 last_child_      : blink::TraceWrapperMember<blink::Node>
+    =134bb11c wrapper_type_info_ : 0x134bb104 blink::WrapperTypeInfo
+    +0x028 tag_name_        : blink::QualifiedName
+    +0x02c element_data_    : blink::Member<blink::ElementData>
+    =134bbe74 wrapper_type_info_ : 0x134bbe5c blink::WrapperTypeInfo
+    =134bbdf0 wrapper_type_info_ : 0x134bbdd8 blink::WrapperTypeInfo
+
+    0:000> dps 0a8ed3a8
+    0a8ed3a8  06d2d431  <--- div object
+    0a8ed3ac  c2d90001
+    0a8ed3b0  00000000
+    0a8ed3b4  061428a4
+    0a8ed3b8  06d11665
+
+16. <Windbg> Analze Oilpan Memory
+
+    0:000> !address 061428a0   <-- div DOM Object
+
+    Usage:                  <unknown>
+    Base Address:           06141000
+    End Address:            0615f000
+    Region Size:            0001e000 ( 120.000 kB)
+    State:                  00001000          MEM_COMMIT
+    Protect:                00000004          PAGE_READWRITE
+    Type:                   00020000          MEM_PRIVATE
+    Allocation Base:        06140000
+    Allocation Protect:     00000001          PAGE_NOACCESS
+
+
+    Content source: 1 (target), length: 760
+
+    0:000> dc 06141000
+    06141000  132cdad0 d817a64e 046044a0 0462c4d0  ..,.N....D`...b.
+    06141010  00000000 00000001 0614181c 00000001  ................
+    06141020  00000000 00000000 00000000 00000000  ................
+    06141030  00000000 00000000 00000000 00000100  ................
+    06141040  00000000 00000000 00000000 00000000  ................
+    06141050  00000000 00000000 08000000 00010204  ................
+    06141060  00000000 00000000 00000000 00000000  ................
+    06141070  00000000 00000000 00000000 00000000  ................
+
+    0:000> dps 06141000
+    06141000  132cdad0 chrome_child!blink::NormalPage::`vftable'
+    06141004  d817a64e
+    06141008  046044a0
+    0614100c  0462c4d0
+    06141010  00000000
+    06141014  00000001
+    06141018  0614181c
+    0614101c  00000001
+    06141020  00000000
+    06141024  00000000
+
+    0:000> dt chrome_child!blink::NormalPage 06141000  
+    +0x000 __VFN_table : 0x132cdad0 
+    +0x004 magic_           : 0xd817a64e
+    +0x008 storage_         : 0x046044a0 blink::PageMemory
+    +0x00c arena_           : 0x0462c4d0 blink::BaseArena
+    +0x010 next_            : (null) 
+    +0x014 swept_           : 1
+    +0x018 object_start_bit_map_ : blink::ObjectStartBitmap
+
+    0:000> dx -r1 ((chrome_child!blink::BaseArena *)0x462c4d0)
+    ((chrome_child!blink::BaseArena *)0x462c4d0)                 : 0x462c4d0 [Type: blink::BaseArena *]
+        [+0x004] first_page_      : 0x6141000 [Type: blink::BasePage *]
+        [+0x008] first_unswept_page_ : 0x0 [Type: blink::BasePage *]
+        [+0x00c] thread_state_    : 0x13ba0414 [Type: blink::ThreadState *]
+        [+0x010] index_           : 11 [Type: int]
+        [+0x014] free_list_       [Type: blink::FreeList]
+        [+0x05c] current_allocation_point_ : 0x61428d4 : 0x0 [Type: unsigned char *]
+        [+0x060] remaining_allocation_size_ : 0x1c728 [Type: unsigned int]
+        [+0x064] last_remaining_allocation_size_ : 0x1c760 [Type: unsigned int]
+        [+0x068] promptly_freed_size_ : 0x0 [Type: unsigned int]
+        [+0x06c] is_lazy_sweeping_ : false [Type: bool]
+
+    0:000> dx -r1 ((chrome_child!blink::FreeList *)0x462c4e4)
+    ((chrome_child!blink::FreeList *)0x462c4e4)                 : 0x462c4e4 [Type: blink::FreeList *]
+        [+0x000] biggest_free_list_index_ : 16 [Type: int]
+        [+0x004] free_lists_      [Type: blink::FreeListEntry * [17]]
+
+    0:000> dc 0x462c4e4 
+    0462c4e4  00000010 00000000 00000000 00000000  ................
+    0462c4f4  00000000 00000000 00000000 00000000  ................
+    0462c504  00000000 00000000 00000000 00000000  ................
+    0462c514  0614181c 00000000 00000000 00000000  ................
+    0462c524  00000000 00000000 061428d4 0001c728  .........(..(...
+    0462c534  0001c760 00000000 00000000 132cda30  `...........0.,.
+    0462c544  06741000 00000000 13ba0414 0000000c  ..t.............
+    0462c554  00000010 00000000 00000000 00000000  ................
+
+    0:000> dx -r1 (*((chrome_child!blink::ThreadState *)0x13ba0414))
+    (*((chrome_child!blink::ThreadState *)0x13ba0414))                 [Type: blink::ThreadState]
+        [=0x13ba04f4] incremental_marking_counter_ : 0 [Type: int]
+        [=0x13ba04f8] wrapper_tracing_counter_ : 0 [Type: int]
+        [=0x13ba0410] thread_specific_ : 0x4604020 [Type: WTF::ThreadSpecific<blink::ThreadState *> *]
+        [=0x13ba0414] main_thread_state_storage_ [Type: unsigned char [0]]
+        [+0x004] heap_            : unique_ptr {...} [Type: std::unique_ptr<blink::ThreadHeap,std::default_delete<blink::ThreadHeap> >]
+        [+0x008] thread_          : 0xe2c [Type: unsigned int]
+        [+0x00c] persistent_region_ : unique_ptr {...} [Type: std::unique_ptr<blink::PersistentRegion,std::default_delete<blink::PersistentRegion> >]
+        [+0x010] weak_persistent_region_ : unique_ptr {...} [Type: std::unique_ptr<blink::PersistentRegion,std::default_delete<blink::PersistentRegion> >]
+        [+0x014] stack_state_     : kHeapPointersOnStack (1) [Type: blink::BlinkGC::StackState]
+        [+0x018] start_of_stack_  : 0x140000 : 2020893505 [Type: int *]
+        [+0x01c] end_of_stack_    : 0x13ef8c : 0 [Type: int *]
+        ...
+
+    0:000> dx -r1 ((chrome_child!std::unique_ptr<blink::ThreadHeap,std::default_delete<blink::ThreadHeap> > *)0x13ba0418)
+    ((chrome_child!std::unique_ptr<blink::ThreadHeap,std::default_delete<blink::ThreadHeap> > *)0x13ba0418)                 : 0x13ba0418 : unique_ptr {...} [Type: std::unique_ptr<blink::ThreadHeap,std::default_delete<blink::ThreadHeap> > *]
+        [<Raw View>]     [Type: std::unique_ptr<blink::ThreadHeap,std::default_delete<blink::ThreadHeap> >]
+        [ptr]            : 0x167a878 [Type: blink::ThreadHeap *]
+        [deleter]        : default_delete [Type: std::_Compressed_pair<std::default_delete<blink::ThreadHeap>,blink::ThreadHeap *,1>]
+
+    0:000> dx -r1 (*((chrome_child!blink::ThreadHeap *)0x167a878))
+    (*((chrome_child!blink::ThreadHeap *)0x167a878))                 [Type: blink::ThreadHeap]
+        [+0x000] thread_state_    : 0x13ba0414 [Type: blink::ThreadState *]
+        [+0x004] heap_stats_collector_ : unique_ptr {...} [Type: std::unique_ptr<blink::ThreadHeapStatsCollector,std::default_delete<blink::ThreadHeapStatsCollector> >]
+        [+0x008] region_tree_     : unique_ptr {...} [Type: std::unique_ptr<blink::RegionTree,std::default_delete<blink::RegionTree> >]
+        [+0x00c] address_cache_   : unique_ptr {...} [Type: std::unique_ptr<blink::AddressCache,std::default_delete<blink::AddressCache> >]
+        [+0x010] free_page_pool_  : unique_ptr {...} [Type: std::unique_ptr<blink::PagePool,std::default_delete<blink::PagePool> >]
+        [+0x014] marking_worklist_ : empty [Type: std::unique_ptr<blink::Worklist<blink::MarkingItem,512,1>,std::default_delete<blink::Worklist<blink::MarkingItem,512,1> > >]
+        [+0x018] not_fully_constructed_worklist_ : empty [Type: std::unique_ptr<blink::Worklist<void *,16,1>,std::default_delete<blink::Worklist<void *,16,1> > >]
+        [+0x01c] weak_callback_worklist_ : empty [Type: std::unique_ptr<blink::Worklist<blink::MarkingItem,256,1>,std::default_delete<blink::Worklist<blink::MarkingItem,256,1> > >]
+        [+0x020] ephemeron_callbacks_ [Type: WTF::HashMap<void *,void (*)(blink::Visitor *, void *),WTF::PtrHash<void>,WTF::HashTraits<void *>,WTF::HashTraits<void (*)(blink::Visitor *, void *)>,WTF::PartitionAllocator>]
+        [+0x030] stack_frame_depth_ [Type: blink::StackFrameDepth]
+        [+0x034] compaction_      : unique_ptr {...} [Type: std::unique_ptr<blink::HeapCompact,std::default_delete<blink::HeapCompact> >]
+        [+0x038] arenas_          [Type: blink::BaseArena * [14]]
+        [+0x070] vector_backing_arena_index_ : 8 [Type: int]
+        [+0x074] arena_ages_      [Type: unsigned int [14]]
+        [+0x0ac] current_arena_ages_ : 0x3 [Type: unsigned int]
+        [+0x0b0] likely_to_be_promptly_freed_ : unique_ptr 0 [Type: std::unique_ptr<int [],std::default_delete<int []> >]
+        [=0x13ba03a8] main_thread_heap_ : 0x167a878 [Type: blink::ThreadHeap *]
+
+    0:000> dx -r1 ((chrome_child!blink::BaseArena * (*)[14])0x167a8b0)
+    ((chrome_child!blink::BaseArena * (*)[14])0x167a8b0)                 : 0x167a8b0 [Type: blink::BaseArena * (*)[14]]
+        [0]              : 0x462c000 [Type: blink::BaseArena *]
+        [1]              : 0x462c070 [Type: blink::BaseArena *]
+        [2]              : 0x462c0e0 [Type: blink::BaseArena *]
+        [3]              : 0x462c150 [Type: blink::BaseArena *]
+        [4]              : 0x462c1c0 [Type: blink::BaseArena *]
+        [5]              : 0x462c230 [Type: blink::BaseArena *]
+        [6]              : 0x462c2a0 [Type: blink::BaseArena *]
+        [7]              : 0x462c310 [Type: blink::BaseArena *]
+        [8]              : 0x462c380 [Type: blink::BaseArena *]
+        [9]              : 0x462c3f0 [Type: blink::BaseArena *]
+        [10]             : 0x462c460 [Type: blink::BaseArena *]
+        [11]             : 0x462c4d0 [Type: blink::BaseArena *]
+        [12]             : 0x462c540 [Type: blink::BaseArena *]
+        [13]             : 0x4608018 [Type: blink::BaseArena *]
+
+    0:000> dx -r1 (*((chrome_child!blink::BaseArena *)0x462c000))
+    (*((chrome_child!blink::BaseArena *)0x462c000))                 [Type: blink::NormalPageArena]
+        [+0x004] first_page_      : 0x5ec1000 [Type: blink::BasePage *]
+        [+0x008] first_unswept_page_ : 0x0 [Type: blink::BasePage *]
+        [+0x00c] thread_state_    : 0x13ba0414 [Type: blink::ThreadState *]
+        [+0x010] index_           : 0 [Type: int]
+        [+0x014] free_list_       [Type: blink::FreeList]
+        [+0x05c] current_allocation_point_ : 0x0 [Type: unsigned char *]
+        [+0x060] remaining_allocation_size_ : 0x0 [Type: unsigned int]
+        [+0x064] last_remaining_allocation_size_ : 0x0 [Type: unsigned int]
+        [+0x068] promptly_freed_size_ : 0x0 [Type: unsigned int]
+        [+0x06c] is_lazy_sweeping_ : false [Type: bool]
+
+    0:000> dx -r1 (*((chrome_child!blink::BaseArena *)0x462c070))
+    (*((chrome_child!blink::BaseArena *)0x462c070))                 [Type: blink::NormalPageArena]
+        [+0x004] first_page_      : 0x5d81000 [Type: blink::BasePage *]
+        [+0x008] first_unswept_page_ : 0x0 [Type: blink::BasePage *]
+        [+0x00c] thread_state_    : 0x13ba0414 [Type: blink::ThreadState *]
+        [+0x010] index_           : 1 [Type: int]
+        [+0x014] free_list_       [Type: blink::FreeList]
+        [+0x05c] current_allocation_point_ : 0x5d865dc : 0x0 [Type: unsigned char *]
+        [+0x060] remaining_allocation_size_ : 0x18a20 [Type: unsigned int]
+        [+0x064] last_remaining_allocation_size_ : 0x18af0 [Type: unsigned int]
+        [+0x068] promptly_freed_size_ : 0x0 [Type: unsigned int]
+        [+0x06c] is_lazy_sweeping_ : false [Type: bool]
+
+    0:000> dx -r1 (*((chrome_child!blink::BaseArena *)0x462c4d0))
+    (*((chrome_child!blink::BaseArena *)0x462c4d0))                 [Type: blink::NormalPageArena]
+        [+0x004] first_page_      : 0x6141000 [Type: blink::BasePage *]
+        [+0x008] first_unswept_page_ : 0x0 [Type: blink::BasePage *]
+        [+0x00c] thread_state_    : 0x13ba0414 [Type: blink::ThreadState *]
+        [+0x010] index_           : 11 [Type: int]
+        [+0x014] free_list_       [Type: blink::FreeList]
+        [+0x05c] current_allocation_point_ : 0x61428d4 : 0x0 [Type: unsigned char *]
+        [+0x060] remaining_allocation_size_ : 0x1c728 [Type: unsigned int]
+        [+0x064] last_remaining_allocation_size_ : 0x1c760 [Type: unsigned int]
+        [+0x068] promptly_freed_size_ : 0x0 [Type: unsigned int]
+        [+0x06c] is_lazy_sweeping_ : false [Type: bool]
+

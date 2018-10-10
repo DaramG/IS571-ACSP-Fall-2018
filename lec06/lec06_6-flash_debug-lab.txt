@@ -1,0 +1,293 @@
+1. Prepare Main.swf using lec06_6-flash.as
+    a. Install AIRSDK4.6 and flex_sdk4.6 (already installed)
+    b. Compile lec06_6-flash.as using FlashDevelop
+    c. Execute the webserver using Mongoose.exe
+    d. Change setup of the MSIE
+       Internet Options > General > Settings > Every time I visit the webpage
+
+2. <MSIE> Access the Main.swf using Internet Explorer
+    An alert message will be came out
+
+    ---------------------------
+    Message from webpage
+    ---------------------------
+    Let's trace the ByteArray object..
+    ---------------------------
+    OK   
+    ---------------------------
+
+3. <FlashDevelop> Obtain an address of a ByteArray object
+   - Compile with Debug mode
+   - Set a breakpoint line 16
+   - Run Test Project(F5)
+    
+4. <Windbg> Attach windbg into the internet explorer process
+    
+    ---------------------------
+    Process Hacker
+    ---------------------------
+    Name               PID
+    - iexplore.exe     1016
+       - iexplore.exe  1204     <--- Attach
+    ---------------------------
+
+5. <Windbg> Analyze the ByteArray object
+    
+    - Display the ByteArray object
+    0:046> dc 70c80a1
+    070c80a1  03108d6d e0000000 18071af2 bc05bad7  m...............
+    070c80b1  40070c80 00000000 38000000 44108d6d  ...@.......8m..D
+    070c80c1  34108d6d c4108d6d 801091eb 00071900  m..4m...........
+    070c80d1  e805a980 00070d10 0b000000 b0000000  ................
+    070c80e1  60108f4f 0005a8b5 00000000 2c000000  O..`...........,
+    070c80f1  03108d6d 00000000 00000000 60000000  m..............`
+    070c8101  00070c81 00000000 00000000 00000000  ................
+    070c8111  00000000 00000000 00000000 00000000  ................
+
+    - Remove atomed pointer and dump
+    0:046> dc 70c80a1 & fffffff8
+    070c80a0  108d6d90 00000003 071af2e0 05bad718  .m..............
+    070c80b0  070c80bc 00000040 00000000 108d6d38  ....@.......8m..
+    070c80c0  108d6d44 108d6d34 1091ebc4 07190080  Dm..4m..........
+    070c80d0  05a98000 070d10e8 00000000 0000000b  ................
+    070c80e0  108f4fb0 05a8b560 00000000 00000000  .O..`...........
+    070c80f0  108d6d2c 00000003 00000000 00000000  ,m..............
+    070c8100  070c8160 00000000 00000000 00000000  `...............
+    070c8110  00000000 00000000 00000000 00000000  ................
+
+    0:046> dps 70c80a1 & fffffff8 L4
+    070c80a0  108d6d90*** ERROR: Symbol file could not be found.  Defaulted to export symbols for C:\Windows\system32\Macromed\Flash\Flash32_15_0_0_167.ocx - 
+    Flash32_15_0_0_167!AdobeCPGetAPI+0x4ab560
+    070c80a4  00000003
+    070c80a8  071af2e0
+    070c80ac  05bad718
+
+    - Display virtual function table without symbol informations
+    0:046> dps 108d6d90 L4
+    108d6d90  10270780 Flash32_15_0_0_167!IAEModule_IAEKernel_UnloadModule+0xf3230
+    108d6d94  1024e5e0 Flash32_15_0_0_167!IAEModule_IAEKernel_UnloadModule+0xd1090
+    108d6d98  0fc140dc Flash32_15_0_0_167+0x340dc
+    108d6d9c  1026d0a0 Flash32_15_0_0_167!IAEModule_IAEKernel_UnloadModule+0xefb50
+
+    0:046> u 10270780 
+    Flash32_15_0_0_167!IAEModule_IAEKernel_UnloadModule+0xf3230:
+    10270780 56              push    esi
+    10270781 8bf1            mov     esi,ecx
+    10270783 57              push    edi
+    10270784 8d7e50          lea     edi,[esi+50h]
+    10270787 8bcf            mov     ecx,edi
+    10270789 e882e5ffff      call    Flash32_15_0_0_167!IAEModule_IAEKernel_UnloadModule+0xf17c0 (1026ed10)
+    1027078e c70784907910    mov     dword ptr [edi],offset Flash32_15_0_0_167!AdobeCPGetAPI+0x36d854 (10799084)
+    10270794 8b4610          mov     eax,dword ptr [esi+10h]
+    
+    - Load symbol
+    0:046> .reload /i flash*
+    *** ERROR: Symbol file could not be found.  Defaulted to export symbols for C:\Windows\system32\Macromed\Flash\Flash32_15_0_0_167.ocx - 
+
+    0:046> !sym noisy
+    noisy mode - symbol prompts on
+
+    0:046> .reload /i flash*
+    SYMSRV:  BYINDEX: 0x5
+            c:\symbols*https://msdl.microsoft.com/download/symbols
+            Flash.pdb
+            1CF622B973BF44C3AFC3CEBA02BACEBE1
+    SYMSRV:  UNC: c:\symbols\Flash.pdb\1CF622B973BF44C3AFC3CEBA02BACEBE1\Flash.pdb - path not found
+    SYMSRV:  UNC: c:\symbols\Flash.pdb\1CF622B973BF44C3AFC3CEBA02BACEBE1\Flash.pd_ - path not found
+    SYMSRV:  UNC: c:\symbols\Flash.pdb\1CF622B973BF44C3AFC3CEBA02BACEBE1\file.ptr - path not found
+    ...
+
+    0:046> .reload /i flash*
+    SYMSRV:  BYINDEX: 0x6
+            c:\symbols*https://msdl.microsoft.com/download/symbols
+            Flash.pdb
+            1CF622B973BF44C3AFC3CEBA02BACEBE1
+    SYMSRV:  PATH: c:\symbols\Flash.pdb\1CF622B973BF44C3AFC3CEBA02BACEBE1\Flash.pdb
+    SYMSRV:  RESULT: 0x00000000
+    ...
+
+    0:046> lm m flash*
+    Browse full module list
+    start    end        module name
+    0fbe0000 10df4000   Flash32_15_0_0_167 M (private pdb symbols)  c:\symbols\Flash.pdb\1CF622B973BF44C3AFC3CEBA02BACEBE1\Flash.pdb
+
+    0:046> dt Flash32_15_0_0_167!*ByteArray*
+            Flash32_15_0_0_167!avmplus::ByteArrayObject
+            Flash32_15_0_0_167!avmplus::ByteArray
+            Flash32_15_0_0_167!avmplus::ByteArray::CompressionAlgorithm
+            Flash32_15_0_0_167!avmplus::ByteArrayObject
+            Flash32_15_0_0_167!MMgc::GCAPI::GCRef<avmplus::ByteArrayClass>
+            Flash32_15_0_0_167!MMgc::GCAPI::GCRef<avmplus::ByteArrayClass>
+            Flash32_15_0_0_167!avmplus::ByteArrayClass
+            Flash32_15_0_0_167!avmplus::ByteArrayClass
+            ...
+
+    - Display the ByteArray object with symbol information
+    0:046> dt Flash32_15_0_0_167!avmplus::ByteArrayObject (70c80a1 & fffffff8)
+    +0x000 __VFN_table : 0x108d6d90 
+    +0x004 composite        : 3
+    +0x008 vtable           : 0x071af2e0 avmplus::VTable
+    +0x00c delegate         : MMgc::GCTraceableBase::GCMember<avmplus::ScriptObject>
+    +0x010 c                : MMgc::Cleaner
+    +0x018 m_byteArray      : avmplus::ByteArray
+
+    0:046> dt Flash32_15_0_0_167!avmplus::ByteArray (70c80a1 & fffffff8) + 18
+    +0x000 __VFN_table : Ptr32 
+    +0x008 __VFN_table : Ptr32 
+    +0x010 m_toplevel       : Ptr32 avmplus::Toplevel
+    +0x014 m_gc             : Ptr32 MMgc::GC
+    +0x018 m_subscribers    : avmplus::WeakRefList<avmplus::DomainEnv>
+    +0x020 m_copyOnWriteOwner : Ptr32 MMgc::GCObject
+    +0x024 m_position       : Uint4B
+    +0x028 m_buffer         : avmplus::FixedHeapRef<avmplus::ByteArray::Buffer,0>
+    +0x030 m_isShareable    : Bool
+    +0x031 m_isLinkWrapper  : Bool
+
+    0:046> dt Flash32_15_0_0_167!avmplus::FixedHeapRef<avmplus::ByteArray::Buffer,0> ((70c80a1 & fffffff8) + 18 + 28)
+    +0x000 __VFN_table : 0x108f4fb0 
+    +0x004 t                : 0x05a8b560 avmplus::ByteArray::Buffer
+    
+    0:046> dt Flash32_15_0_0_167!avmplus::ByteArray::Buffer poi(((70c80a1 & fffffff8) + 18 + 28) + 4)
+    +0x000 __VFN_table : 0x108d6294 
+    +0x004 m_rcount         : vmbase::AtomicCounter32
+    +0x008 array            : 0x070d2000  "It's buffer"
+    +0x00c capacity         : 0x1000
+    +0x010 length           : 0x1000
+    +0x014 copyOnWrite      : 0
+
+    0:046> dc 0x070d2000  
+    070d2000  73277449 66756220 00726566 00000000  It's buffer.....
+    070d2010  00000000 00000000 00000000 00000000  ................
+    070d2020  00000000 00000000 00000000 00000000  ................
+    070d2030  00000000 00000000 00000000 00000000  ................
+    070d2040  00000000 00000000 00000000 00000000  ................
+    070d2050  00000000 00000000 00000000 00000000  ................
+    070d2060  00000000 00000000 00000000 00000000  ................
+    070d2070  00000000 00000000 00000000 00000000  ................
+
+    0:046> dc poi(((70c80a1 & fffffff8) + 18 + 28) + 4)
+    05a8b560  108d6294 00000001 070d2000 00001000  .b....... ......
+    05a8b570  00001000 00000000 2e777777 7263616d  ........www.macr
+    05a8b580  64656d6f 632e6169 00006d6f 00000000  omedia.com......
+    05a8b590  2e777777 7263616d 64656d6f 632e6169  www.macromedia.c
+    05a8b5a0  00006d6f 00000000 107b1700 00009c89  om........{.....
+    05a8b5b0  00000000 05a98000 0000009b 00000000  ................
+    05a8b5c0  00000001 00000000 05a927f0 0000000a  .........'......
+    05a8b5d0  0000000b 00000000 00000001 00000000  ................
+
+    0:046> ??sizeof(Flash32_15_0_0_167!avmplus::ByteArrayObject)
+    unsigned int 0x5c
+
+    0:046> dc 70c80a1 & fffffff8
+    070c80a0  108d6d90 00000003 071af2e0 05bad718  .m..............
+    070c80b0  070c80bc 00000040 00000000 108d6d38  ....@.......8m..
+    070c80c0  108d6d44 108d6d34 1091ebc4 07190080  Dm..4m..........
+    070c80d0  05a98000 070d10e8 00000000 0000000b  ................
+    070c80e0  108f4fb0 05a8b560 00000000 00000000  .O..`...........
+    070c80f0  108d6d2c 00000003 00000000 00000000  ,m..............
+    070c8100  070c8160 00000000 00000000 00000000  `...............
+    070c8110  00000000 00000000 00000000 00000000  ................
+
+    0:046> dc (70c80a1 & fffffff8) - 60
+    070c8040  108594f8 00000004 08dc7850 05bad4a8  ........Px......
+    070c8050  00000000 00000000 070b8630 00000000  ........0.......
+    070c8060  00000000 00000000 00000000 05aadf60  ............`...
+    070c8070  0000002b 05ac7128 00000000 00000000  +...(q..........
+    070c8080  00000000 00000000 00000000 00000000  ................
+    070c8090  00000000 00000000 00000000 00000000  ................
+    070c80a0  108d6d90 00000003 071af2e0 05bad718  .m..............
+    070c80b0  070c80bc 00000040 00000000 108d6d38  ....@.......8m..
+
+    0:046> dc (70c80a1 & fffffff8) - 60 * 2
+    070c7fe0  00000000 00000000 00000000 00000000  ................
+    070c7ff0  00000000 00000000 00000000 00000000  ................
+    070c8000  01010600 00000060 05a98000 05a9d570  ....`.......p...
+    070c8010  00000000 070a5cc0 00000000 00000000  .....\..........
+    070c8020  00000000 00000000 01000000 070c8040  ............@...
+    070c8030  00000000 00000000 00000000 00000000  ................
+    070c8040  108594f8 00000004 08dc7850 05bad4a8  ........Px......
+    070c8050  00000000 00000000 070b8630 00000000  ........0.......
+
+    0:046> dt Flash32_15_0_0_167!*GCBlock*
+            Flash32_15_0_0_167!MMgc::GCBlockHeader
+            Flash32_15_0_0_167!MMgc::GCAlloc::GCBlock
+            Flash32_15_0_0_167!MMgc::GCAlloc::GCBlock
+
+    0:046> dt Flash32_15_0_0_167!MMgc::GCAlloc::GCBlock
+    +0x000 bibopTag         : UChar
+    +0x001 bitsShift        : UChar
+    +0x002 containsPointers : UChar
+    +0x003 rcobject         : UChar
+    +0x004 size             : Uint4B
+    +0x008 gc               : Ptr32 MMgc::GC
+    +0x00c alloc            : Ptr32 MMgc::GCAllocBase
+    +0x010 next             : Ptr32 MMgc::GCBlockHeader
+    +0x014 bits             : Ptr32 UChar
+    +0x018 prev             : Ptr32 MMgc::GCAlloc::GCBlock
+    +0x01c firstFree        : Ptr32 Void
+    +0x020 prevFree         : Ptr32 MMgc::GCAlloc::GCBlock
+    +0x024 nextFree         : Ptr32 MMgc::GCAlloc::GCBlock
+    +0x028 numFree          : Int2B
+    +0x02a slowFlags        : UChar
+    +0x02b finalizeState    : Pos 0, 1 Bit
+    +0x02c items            : Ptr32 Char
+
+    0:046> dt Flash32_15_0_0_167!MMgc::GCAlloc::GCBlock 070c8000  
+    +0x000 bibopTag         : 0 ''
+    +0x001 bitsShift        : 0x6 ''
+    +0x002 containsPointers : 0x1 ''
+    +0x003 rcobject         : 0x1 ''
+    +0x004 size             : 0x60
+    +0x008 gc               : 0x05a98000 MMgc::GC
+    +0x00c alloc            : 0x05a9d570 MMgc::GCAllocBase
+    +0x010 next             : (null) 
+    +0x014 bits             : 0x070a5cc0  "???"
+    +0x018 prev             : (null) 
+    +0x01c firstFree        : (null) 
+    +0x020 prevFree         : (null) 
+    +0x024 nextFree         : (null) 
+    +0x028 numFree          : 0n0
+    +0x02a slowFlags        : 0 ''
+    +0x02b finalizeState    : 0y1
+    +0x02c items            : 0x070c8040  "???"
+
+    0:046> dc 0x070c8040
+    070c8040  108594f8 00000004 08dc7850 05bad4a8  ........Px......
+    070c8050  00000000 00000000 070b8630 00000000  ........0.......
+    070c8060  00000000 00000000 00000000 05aadf60  ............`...
+    070c8070  0000002b 05ac7128 00000000 00000000  +...(q..........
+    070c8080  00000000 00000000 00000000 00000000  ................
+    070c8090  00000000 00000000 00000000 00000000  ................
+    070c80a0  108d6d90 00000003 071af2e0 05bad718  .m..............
+    070c80b0  070c80bc 00000040 00000000 108d6d38  ....@.......8m..
+
+    0:046> dc 0x070c8040 + 60
+    070c80a0  108d6d90 00000003 071af2e0 05bad718  .m..............
+    070c80b0  070c80bc 00000040 00000000 108d6d38  ....@.......8m..
+    070c80c0  108d6d44 108d6d34 1091ebc4 07190080  Dm..4m..........
+    070c80d0  05a98000 070d10e8 00000000 0000000b  ................
+    070c80e0  108f4fb0 05a8b560 00000000 00000000  .O..`...........
+    070c80f0  108d6d2c 00000003 00000000 00000000  ,m..............
+    070c8100  070c8160 00000000 00000000 00000000  `...............
+    070c8110  00000000 00000000 00000000 00000000  ................
+
+    0:046> dc 0x070c8040 + 60 * 2
+    070c8100  070c8160 00000000 00000000 00000000  `...............
+    070c8110  00000000 00000000 00000000 00000000  ................
+    070c8120  00000000 00000000 00000000 00000000  ................
+    070c8130  00000000 00000000 00000000 00000000  ................
+    070c8140  00000000 00000000 00000000 00000000  ................
+    070c8150  00000000 00000000 00000000 00000000  ................
+    070c8160  070c81c0 00000000 00000000 00000000  ................
+    070c8170  00000000 00000000 00000000 00000000  ................
+
+    0:046> dc 0x070c8040 + 60 * 3
+    070c8160  070c81c0 00000000 00000000 00000000  ................
+    070c8170  00000000 00000000 00000000 00000000  ................
+    070c8180  00000000 00000000 00000000 00000000  ................
+    070c8190  00000000 00000000 00000000 00000000  ................
+    070c81a0  00000000 00000000 00000000 00000000  ................
+    070c81b0  00000000 00000000 00000000 00000000  ................
+    070c81c0  070c8220 00000000 00000000 00000000   ...............
+    070c81d0  00000000 00000000 00000000 00000000  ................
+   
