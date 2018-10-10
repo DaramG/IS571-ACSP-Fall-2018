@@ -57,7 +57,8 @@
     076b9db8  06e03827 06e0381f 06e03817 06e0380f  '8...8...8...8..
               4th      5th      6th      7th 0xdeadf00d
 
-7. <Windbg> Display datas in obj_array easily more
+7. <Windbg> Display datas in obj_array easily more 
+    Try to analyze again, using lec06_7-flash_easier.as
 
     // The atomed integer of the 0x2222222 integer is 0x11111116.
     var va:Vector.<Object> = new <Object>[0x2222222, "Volvo", xxx];
