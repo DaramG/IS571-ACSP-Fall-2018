@@ -42,17 +42,17 @@
 | 17/10/2018 | No class(Midterm week)
 | 22/10/2018 | Objects Tracking(3/3) - Chrome Objects | Report #3(~11.11.)
 | 24/10/2018 | Heap Exploitation(1/2)
-| 29/10/2018 | Heap Exploitation(2/2) 
+| 29/10/2018 | Heap Exploitation(2/2)
 | 31/10/2018 | RW Primitives
-| 05/11/2018 | No lecture | Supplementary lecture(12/11/2018 14:00~14:30)
-| 07/11/2018 | No lecture | Supplementary lecture(14/11/2018 14:00~14:30)
+| 05/11/2018 | No class | Supplementary class(12/11/2018 14:00~14:30)
+| 07/11/2018 | No class | Supplementary class(14/11/2018 14:00~14:30)
 | 12/11/2018 | Control Flow Hijacking<br>ROP - Return-Oriented Programming | Calling Conventions<br>Intel® 64 and IA-32 Architectures
 | 14/11/2018 | Shellcode
 | 19/11/2018 | macOS Architecture | Mac OS X and IOS Internals: To the Apple's Core
 | 21/11/2018 | macOS March-O and Dynamic Linker
 | 26/11/2018 | macOS Process Internals, Memory Mgmt.,<br> and Objective-C
 | 28/11/2018 | macOS LaunchD, Mach, and Sandbox
-| 03/12/2018 | Project Presentation(1/2)
+| 03/12/2018 | <a href='https://github.com/jaeseolee/IS571-ACSP-Fall-2018/raw/master/lec11/11-Project.pdf'>Project Presentation</a>(1/2)
 | 05/12/2018 | Project Presentation(2/2)
 | 10/12/2018 | No class(Final week)
 | 12/12/2018 | No class(Final week)
