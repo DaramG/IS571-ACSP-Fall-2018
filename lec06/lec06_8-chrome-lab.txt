@@ -10,7 +10,6 @@
 4. <DevTool> Write script code
     var xxx = new ArrayBuffer(0x40);
     var obj_array = [1, "Volvo", xxx];
-    obj_array[0] = 0x22222222;
 
 5. <Windbg> Attach windbg into the renderer process
 
@@ -37,7 +36,7 @@
     0:000> x chrome_child!v8::internal::*:ElementsKindTraits<HOLEY_ELEMENTS> >::Set
     10d5ab00          chrome_child!v8::internal::`anonymous namespace'::ElementsAccessorBase<v8::internal::(anonymous namespace)::FastHoleyObjectElementsAccessor,v8::internal::(anonymous namespace)::ElementsKindTraits<HOLEY_ELEMENTS> >::Set (class v8::internal::Handle<v8::internal::JSObject>, unsigned int, class v8::internal::Object *)
     0:000> u 10d5ab00 + 0x17
-    0:000> g
+    0:000> bp 10d5ab00 + 0x17; g
 
 7. <DevTool> Write break code 
     > obj_array[0] = 0x22222222;
@@ -59,6 +58,7 @@
     04c7a6b4  5f6a626f 61727261 5d305b79 30203d20  obj_array[0] = 0
 
 9. <Windbg> Display the "Volvo" string object
+    0:000> dc 04aa3e41-1
     04aa3e40  04e84341 f3ef69ce 0000000a 766c6f56  AC...i......Volv
     04aa3e50  0000006f 04e84679 050ff779 050ff6e1  o...yF..y.......
 
@@ -103,6 +103,9 @@
     
 12. Analyze PartitionAlloc: new ArrayBuffer(0x40)
 
+    0:023> !address 07408000
+    ...
+
     0:023> ?07408000 & 0x-200000
     Evaluate expression: 121634816 = 07400000
     
@@ -133,6 +136,12 @@
     07401060  00000000 00000000 00000000 00000000  ................
     07401070  00000000 00000000 00000000 00000000  ................
     
+    ...
+
+    0:023> ?(07408000 & 0x1fffff)/0n16384
+    ...
+
+    0:023> dt chrome_child!base::internal::PartitionPage 07400000 + 1000 + 20*2 (index)
     ...
 
 13. Analyze V8 Heap: var xxx = ...
